@@ -7,6 +7,8 @@ const BoardList = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
+  const [activeFilter, setActiveFilter] = useState("all");
+  const [showCreateCard, setShowCreateCard] = useState(true);
 
   const fetchBoards = async () => {
     try {
@@ -93,6 +95,53 @@ const BoardList = () => {
     setSearchTerm(e.target.value);
   };
 
+  const handleFilterChange = (filter) => {
+    setActiveFilter(filter);
+    setSearchTerm(""); // Clear search when changing filters
+
+    if (filter === "all") {
+      setFilteredBoards(boards);
+      setShowCreateCard(true);
+    } else if (filter === "recent") {
+      // Show boards created in the last 7 days
+      const sevenDaysAgo = new Date();
+      sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+
+      const recentBoards = boards.filter((board) => {
+        const boardDate = new Date(board.createdAt);
+        return boardDate >= sevenDaysAgo;
+      });
+
+      setFilteredBoards(recentBoards);
+      setShowCreateCard(true);
+    } else if (filter === "create") {
+      // Hide all boards, show only create card
+      setFilteredBoards([]);
+      setShowCreateCard(true);
+    }
+  };
+
+  const getDisplayBoards = () => {
+    if (searchTerm.trim()) {
+      return filteredBoards;
+    }
+
+    if (activeFilter === "all") {
+      return boards;
+    } else if (activeFilter === "recent") {
+      const sevenDaysAgo = new Date();
+      sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+      return boards.filter((board) => {
+        const boardDate = new Date(board.createdAt);
+        return boardDate >= sevenDaysAgo;
+      });
+    } else if (activeFilter === "create") {
+      return [];
+    }
+
+    return boards;
+  };
+
   useEffect(() => {
     fetchBoards();
   }, []);
@@ -102,9 +151,18 @@ const BoardList = () => {
     if (searchTerm.trim()) {
       handleSearch();
     } else {
-      setFilteredBoards(boards);
+      handleFilterChange(activeFilter);
     }
-  }, [boards, searchTerm]);
+  }, [boards]);
+
+  useEffect(() => {
+    // Update filtered boards when search term changes
+    if (searchTerm.trim()) {
+      handleSearch();
+    } else {
+      handleFilterChange(activeFilter);
+    }
+  }, [searchTerm]);
 
   if (loading) {
     return <div className="loading">Loading boards...</div>;
@@ -135,20 +193,64 @@ const BoardList = () => {
             Clear
           </button>
         </div>
+
+        {/* Filter Buttons */}
+        <div className="filter-buttons">
+          <button
+            className={`filter-button ${
+              activeFilter === "all" ? "active" : ""
+            }`}
+            onClick={() => handleFilterChange("all")}
+          >
+            All
+          </button>
+          <button
+            className={`filter-button ${
+              activeFilter === "recent" ? "active" : ""
+            }`}
+            onClick={() => handleFilterChange("recent")}
+          >
+            Recent
+          </button>
+          <button
+            className={`filter-button create-filter ${
+              activeFilter === "create" ? "active" : ""
+            }`}
+            onClick={() => handleFilterChange("create")}
+          >
+            Create a New Board
+          </button>
+        </div>
+
         {searchTerm && (
           <div className="search-results-info">
             Showing {filteredBoards.length} of {boards.length} boards
             {searchTerm && ` for "${searchTerm}"`}
           </div>
         )}
+
+        {activeFilter === "recent" && !searchTerm && (
+          <div className="filter-info">
+            Showing boards created in the last 7 days (
+            {getDisplayBoards().length} boards)
+          </div>
+        )}
+
+        {activeFilter === "create" && !searchTerm && (
+          <div className="filter-info">
+            Create mode - Focus on adding new boards
+          </div>
+        )}
       </div>
 
       <div className="boards-grid">
-        {/* Create new board card - always first */}
-        <BoardCard isCreateCard={true} onCreateNew={handleCreateNew} />
+        {/* Create new board card - show based on filter */}
+        {showCreateCard && (
+          <BoardCard isCreateCard={true} onCreateNew={handleCreateNew} />
+        )}
 
         {/* Existing boards */}
-        {(searchTerm ? filteredBoards : boards).map((board) => (
+        {getDisplayBoards().map((board) => (
           <BoardCard
             key={board.id}
             board={board}

@@ -2,6 +2,7 @@ import React from "react";
 import "./App.css";
 import Header from "./components/Header";
 import BoardList from "./components/BoardList";
+import Footer from "./components/Footer";
 
 function App() {
   return (
@@ -13,6 +14,8 @@ function App() {
           <BoardList />
         </div>
       </main>
+
+      <Footer />
     </div>
   );
 }
