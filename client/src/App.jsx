@@ -1,23 +1,27 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import "./App.css";
+import Header from "./components/Header";
+import BoardForm from "./components/BoardForm";
+import BoardList from "./components/BoardList";
 
 function App() {
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
+
+  const handleBoardCreated = (newBoard) => {
+    // Trigger a refresh of the board list
+    setRefreshTrigger((prev) => prev + 1);
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Header />
+
+      <main className="main-content">
+        <div className="container">
+          <BoardForm onBoardCreated={handleBoardCreated} />
+          <BoardList refreshTrigger={refreshTrigger} />
+        </div>
+      </main>
     </div>
   );
 }
