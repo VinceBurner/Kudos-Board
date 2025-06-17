@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import BoardCard from "./BoardCard";
 
-const BoardList = ({ refreshTrigger }) => {
+const BoardList = () => {
   const [boards, setBoards] = useState([]);
+  const [filteredBoards, setFilteredBoards] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
 
   const fetchBoards = async () => {
     try {
@@ -53,9 +55,56 @@ const BoardList = ({ refreshTrigger }) => {
     }
   };
 
+  const handleCreateNew = (newBoard) => {
+    // Add the new board to the local state
+    setBoards((prevBoards) => [...prevBoards, newBoard]);
+  };
+
+  const handleEditBoard = (updatedBoard) => {
+    // Update the board in the local state
+    setBoards((prevBoards) =>
+      prevBoards.map((board) =>
+        board.id === updatedBoard.id ? updatedBoard : board
+      )
+    );
+  };
+
+  const handleSearch = () => {
+    if (!searchTerm.trim()) {
+      setFilteredBoards(boards);
+      return;
+    }
+
+    const filtered = boards.filter(
+      (board) =>
+        board.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        board.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        board.author.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setFilteredBoards(filtered);
+  };
+
+  const handleClearSearch = () => {
+    setSearchTerm("");
+    setFilteredBoards(boards);
+  };
+
+  const handleSearchInputChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
   useEffect(() => {
     fetchBoards();
-  }, [refreshTrigger]);
+  }, []);
+
+  useEffect(() => {
+    // Update filtered boards when boards change
+    if (searchTerm.trim()) {
+      handleSearch();
+    } else {
+      setFilteredBoards(boards);
+    }
+  }, [boards, searchTerm]);
 
   if (loading) {
     return <div className="loading">Loading boards...</div>;
@@ -69,19 +118,62 @@ const BoardList = ({ refreshTrigger }) => {
     <div className="board-list">
       <h2>Kudos Boards ({boards.length})</h2>
 
-      {boards.length === 0 ? (
-        <div className="no-boards">
-          <p>No boards created yet. Create your first board above!</p>
+      {/* Search Area */}
+      <div className="search-area">
+        <div className="search-input-group">
+          <input
+            type="text"
+            placeholder="Search boards by title, category, or author..."
+            value={searchTerm}
+            onChange={handleSearchInputChange}
+            className="search-input"
+          />
+          <button onClick={handleSearch} className="search-button">
+            Search
+          </button>
+          <button onClick={handleClearSearch} className="clear-button">
+            Clear
+          </button>
         </div>
-      ) : (
-        <div className="boards-grid">
-          {boards.map((board) => (
-            <BoardCard
-              key={board.id}
-              board={board}
-              onDelete={handleDeleteBoard}
-            />
-          ))}
+        {searchTerm && (
+          <div className="search-results-info">
+            Showing {filteredBoards.length} of {boards.length} boards
+            {searchTerm && ` for "${searchTerm}"`}
+          </div>
+        )}
+      </div>
+
+      <div className="boards-grid">
+        {/* Create new board card - always first */}
+        <BoardCard isCreateCard={true} onCreateNew={handleCreateNew} />
+
+        {/* Existing boards */}
+        {(searchTerm ? filteredBoards : boards).map((board) => (
+          <BoardCard
+            key={board.id}
+            board={board}
+            onDelete={handleDeleteBoard}
+            onCreateNew={handleCreateNew}
+            onEdit={handleEditBoard}
+          />
+        ))}
+      </div>
+
+      {boards.length === 0 && (
+        <div className="no-boards-message">
+          <p>
+            No boards created yet. Use the card above to create your first
+            board!
+          </p>
+        </div>
+      )}
+
+      {searchTerm && filteredBoards.length === 0 && boards.length > 0 && (
+        <div className="no-search-results">
+          <p>No boards found matching "{searchTerm}"</p>
+          <button onClick={handleClearSearch} className="clear-search-button">
+            Show All Boards
+          </button>
         </div>
       )}
     </div>

@@ -39,6 +39,34 @@ app.post("/api/boards", (req, res) => {
   res.status(201).json(newBoard);
 });
 
+// PUT update a board by ID
+app.put("/api/boards/:id", (req, res) => {
+  const boardId = parseInt(req.params.id);
+  const { title, category, author } = req.body;
+  const boardIndex = boards.findIndex((board) => board.id === boardId);
+
+  if (boardIndex === -1) {
+    return res.status(404).json({ error: "Board not found" });
+  }
+
+  if (!title || !category || !author) {
+    return res
+      .status(400)
+      .json({ error: "Title, category, and author are required" });
+  }
+
+  // Update the board
+  boards[boardIndex] = {
+    ...boards[boardIndex],
+    title,
+    category,
+    author,
+    updatedAt: new Date().toISOString(),
+  };
+
+  res.json(boards[boardIndex]);
+});
+
 // DELETE a board by ID
 app.delete("/api/boards/:id", (req, res) => {
   const boardId = parseInt(req.params.id);
