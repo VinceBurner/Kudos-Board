@@ -34,6 +34,7 @@ app.post("/api/boards", (req, res) => {
     author,
     image: image || "",
     createdAt: new Date().toISOString(),
+    upvotes: 0,
     kudos: [],
   };
 
@@ -44,7 +45,7 @@ app.post("/api/boards", (req, res) => {
 // PUT update a board by ID
 app.put("/api/boards/:id", (req, res) => {
   const boardId = parseInt(req.params.id);
-  const { title, description, category, author, image } = req.body;
+  const { title, description, category, author, image, kudos } = req.body;
   const boardIndex = boards.findIndex((board) => board.id === boardId);
 
   if (boardIndex === -1) {
@@ -66,6 +67,7 @@ app.put("/api/boards/:id", (req, res) => {
     category,
     author,
     image: image !== undefined ? image : boards[boardIndex].image,
+    kudos: kudos !== undefined ? kudos : boards[boardIndex].kudos,
     updatedAt: new Date().toISOString(),
   };
 
@@ -95,6 +97,30 @@ app.get("/api/boards/:id", (req, res) => {
   }
 
   res.json(board);
+});
+
+// POST upvote a board
+app.post("/api/boards/:id/upvote", (req, res) => {
+  const boardId = parseInt(req.params.id);
+  const boardIndex = boards.findIndex((board) => board.id === boardId);
+
+  if (boardIndex === -1) {
+    return res.status(404).json({ error: "Board not found" });
+  }
+
+  // Initialize upvotes if it doesn't exist
+  if (!boards[boardIndex].upvotes) {
+    boards[boardIndex].upvotes = 0;
+  }
+
+  // Increment upvotes
+  boards[boardIndex].upvotes += 1;
+  boards[boardIndex].updatedAt = new Date().toISOString();
+
+  res.json({
+    message: "Board upvoted successfully",
+    board: boards[boardIndex],
+  });
 });
 
 // POST upvote a card in a board

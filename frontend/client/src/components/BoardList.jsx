@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import BoardCard from "./BoardCard";
 import CategoryFilter from "./CategoryFilter";
 
-const BoardList = ({ onViewDetails }) => {
+const BoardList = () => {
   const [boards, setBoards] = useState([]);
   const [filteredBoards, setFilteredBoards] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -138,6 +138,15 @@ const BoardList = ({ onViewDetails }) => {
 
   const handleEditBoard = (updatedBoard) => {
     // Update the board in the local state
+    setBoards((prevBoards) =>
+      prevBoards.map((board) =>
+        board.id === updatedBoard.id ? updatedBoard : board
+      )
+    );
+  };
+
+  const handleUpvoteBoard = (updatedBoard) => {
+    // Update the board in the local state after upvote
     setBoards((prevBoards) =>
       prevBoards.map((board) =>
         board.id === updatedBoard.id ? updatedBoard : board
@@ -432,7 +441,7 @@ const BoardList = ({ onViewDetails }) => {
             onDelete={handleDeleteBoard}
             onCreateNew={handleCreateNew}
             onEdit={handleEditBoard}
-            onViewDetails={onViewDetails}
+            onUpvote={handleUpvoteBoard}
           />
         ))}
       </div>

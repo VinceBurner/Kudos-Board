@@ -1,13 +1,16 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const BoardCard = ({
   board,
   onDelete,
   onCreateNew,
   onEdit,
-  onViewDetails,
+  onUpvote,
   isCreateCard = false,
 }) => {
+  const navigate = useNavigate();
+  const [isUpvoting, setIsUpvoting] = useState(false);
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [showEditForm, setShowEditForm] = useState(false);
   const [formData, setFormData] = useState({
@@ -31,6 +34,38 @@ const BoardCard = ({
 
   const handleDelete = () => {
     onDelete(board.id);
+  };
+
+  const handleUpvote = async () => {
+    if (isUpvoting) return;
+
+    try {
+      setIsUpvoting(true);
+      const response = await fetch(
+        `http://localhost:5000/api/boards/${board.id}/upvote`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to upvote board");
+      }
+
+      const result = await response.json();
+
+      // Notify parent component about the updated board
+      if (onUpvote) {
+        onUpvote(result.board);
+      }
+    } catch (err) {
+      console.error("Error upvoting board:", err);
+    } finally {
+      setIsUpvoting(false);
+    }
   };
 
   const handleCreateNew = () => {
@@ -346,6 +381,11 @@ const BoardCard = ({
               </span>
             </div>
 
+            <div className="board-upvotes">
+              <span className="upvotes-label">Upvotes:</span>
+              <span className="upvotes-value">{board.upvotes || 0}</span>
+            </div>
+
             {board.description && (
               <div className="board-description">
                 <span className="description-label">Description:</span>
@@ -361,13 +401,27 @@ const BoardCard = ({
           )}
 
           <div className="board-footer">
-            <button
-              className="view-details-button modern-button primary"
-              onClick={() => onViewDetails && onViewDetails(board.id)}
-            >
-              <span className="button-icon">👁️</span>
-              View Details
-            </button>
+            <div className="board-footer-actions">
+              <button
+                onClick={handleUpvote}
+                className={`upvote-board-button modern-button ${
+                  isUpvoting ? "upvoting" : "upvote"
+                }`}
+                disabled={isUpvoting}
+                title="Upvote this board"
+              >
+                <span className="upvote-icon">{isUpvoting ? "⏳" : "👍"}</span>
+                <span className="upvote-count">{board.upvotes || 0}</span>
+              </button>
+
+              <button
+                className="view-details-button modern-button primary"
+                onClick={() => navigate(`/boards/${board.id}`)}
+              >
+                <span className="button-icon">👁️</span>
+                View Details
+              </button>
+            </div>
           </div>
         </>
       ) : (

@@ -41,7 +41,7 @@ const Footer = () => {
 
         <div className="footer-bottom">
           <p>
-            &copy; {currentYear} Kudos Board. Made with ❤️ for celebrating
+            &copy; {currentYear} Kudos Board. Made for celebrating
             achievements.
           </p>
         </div>

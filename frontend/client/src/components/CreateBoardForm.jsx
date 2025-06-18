@@ -5,6 +5,7 @@ const CreateBoardForm = ({ onCreateNew, onCancel }) => {
     title: "",
     category: "",
     author: "",
+    image: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
@@ -37,7 +38,7 @@ const CreateBoardForm = ({ onCreateNew, onCancel }) => {
 
       const newBoard = await response.json();
 
-      setFormData({ title: "", category: "", author: "" });
+      setFormData({ title: "", category: "", author: "", image: "" });
 
       if (onCreateNew) {
         onCreateNew(newBoard);
@@ -50,7 +51,7 @@ const CreateBoardForm = ({ onCreateNew, onCancel }) => {
   };
 
   const handleCancel = () => {
-    setFormData({ title: "", category: "", author: "" });
+    setFormData({ title: "", category: "", author: "", image: "" });
     setError("");
     if (onCancel) {
       onCancel();
@@ -98,6 +99,16 @@ const CreateBoardForm = ({ onCreateNew, onCancel }) => {
               onChange={handleFormChange}
               placeholder="Your name"
               required
+            />
+          </div>
+
+          <div className="form-group">
+            <input
+              type="url"
+              name="image"
+              value={formData.image}
+              onChange={handleFormChange}
+              placeholder="Wallpaper image URL (optional)"
             />
           </div>
 
