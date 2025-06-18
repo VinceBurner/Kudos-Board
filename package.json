@@ -3,5 +3,24 @@
     "@prisma/client": "^6.10.0",
     "express": "^5.1.0",
     "pg": "^8.16.0"
-  }
+  },
+  "name": "kudos-board-2",
+  "version": "1.0.0",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VinceBurner/Kudos-Board.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/VinceBurner/Kudos-Board/issues"
+  },
+  "homepage": "https://github.com/VinceBurner/Kudos-Board#readme",
+  "description": ""
 }
