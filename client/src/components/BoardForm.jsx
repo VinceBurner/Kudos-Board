@@ -1,13 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
-const BoardForm = ({ onBoardCreated }) => {
-  const [formData, setFormData] = useState({
-    title: "",
-    category: "",
-    author: "",
-  });
+const BoardForm = ({
+  title,
+  initialData = { title: "", category: "", author: "" },
+  onSubmit,
+  onCancel,
+  submitButtonText = "Submit",
+  apiEndpoint = "http://localhost:5000/api/boards",
+  method = "POST",
+}) => {
+  const [formData, setFormData] = useState(initialData);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    setFormData(initialData);
+  }, [initialData]);
 
   const handleChange = (e) => {
     setFormData({
@@ -22,8 +30,8 @@ const BoardForm = ({ onBoardCreated }) => {
     setError("");
 
     try {
-      const response = await fetch("http://localhost:5000/api/boards", {
-        method: "POST",
+      const response = await fetch(apiEndpoint, {
+        method: method,
         headers: {
           "Content-Type": "application/json",
         },
@@ -32,21 +40,20 @@ const BoardForm = ({ onBoardCreated }) => {
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error || "Failed to create board");
+        throw new Error(
+          errorData.error ||
+            `Failed to ${method === "POST" ? "create" : "update"} board`
+        );
       }
 
-      const newBoard = await response.json();
+      const resultBoard = await response.json();
 
       // Reset form
-      setFormData({
-        title: "",
-        category: "",
-        author: "",
-      });
+      setFormData({ title: "", category: "", author: "" });
 
       // Notify parent component
-      if (onBoardCreated) {
-        onBoardCreated(newBoard);
+      if (onSubmit) {
+        onSubmit(resultBoard);
       }
     } catch (err) {
       setError(err.message);
@@ -55,33 +62,37 @@ const BoardForm = ({ onBoardCreated }) => {
     }
   };
 
+  const handleCancel = () => {
+    setFormData({ title: "", category: "", author: "" });
+    setError("");
+    if (onCancel) {
+      onCancel();
+    }
+  };
+
   return (
-    <div className="board-form">
-      <h2>Create New Kudos Board</h2>
+    <div className="create-form">
+      <h3>{title}</h3>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
-          <label htmlFor="title">Board Title:</label>
           <input
             type="text"
-            id="title"
             name="title"
             value={formData.title}
             onChange={handleChange}
+            placeholder="Board title"
             required
-            placeholder="Enter board title"
           />
         </div>
 
         <div className="form-group">
-          <label htmlFor="category">Category:</label>
           <select
-            id="category"
             name="category"
             value={formData.category}
             onChange={handleChange}
             required
           >
-            <option value="">Select a category</option>
+            <option value="">Select category</option>
             <option value="Team Recognition">Team Recognition</option>
             <option value="Project Milestone">Project Milestone</option>
             <option value="Personal Achievement">Personal Achievement</option>
@@ -92,23 +103,34 @@ const BoardForm = ({ onBoardCreated }) => {
         </div>
 
         <div className="form-group">
-          <label htmlFor="author">Your Name:</label>
           <input
             type="text"
-            id="author"
             name="author"
             value={formData.author}
             onChange={handleChange}
+            placeholder="Your name"
             required
-            placeholder="Enter your name"
           />
         </div>
 
         {error && <div className="error-message">{error}</div>}
 
-        <button type="submit" disabled={isSubmitting}>
-          {isSubmitting ? "Creating..." : "Create Board"}
-        </button>
+        <div className="form-buttons">
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className="submit-button"
+          >
+            {isSubmitting ? `${submitButtonText}ing...` : submitButtonText}
+          </button>
+          <button
+            type="button"
+            onClick={handleCancel}
+            className="cancel-button"
+          >
+            Cancel
+          </button>
+        </div>
       </form>
     </div>
   );

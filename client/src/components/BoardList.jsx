@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
-import BoardCard from "./BoardCard";
+import SearchArea from "./SearchArea";
+import FilterButtons from "./FilterButtons";
+import CategoryGroupView from "./CategoryGroupView";
+import BoardGrid from "./BoardGrid";
 
 const BoardList = () => {
   const [boards, setBoards] = useState([]);
@@ -207,148 +210,39 @@ const BoardList = () => {
     <div className="board-list">
       <h2>Kudos Boards ({boards.length})</h2>
 
-      {/* Search Area */}
-      <div className="search-area">
-        <div className="search-input-group">
-          <input
-            type="text"
-            placeholder="Search boards by title, category, or author..."
-            value={searchTerm}
-            onChange={handleSearchInputChange}
-            className="search-input"
-          />
-          <button onClick={handleSearch} className="search-button">
-            Search
-          </button>
-          <button onClick={handleClearSearch} className="clear-button">
-            Clear
-          </button>
-        </div>
+      <SearchArea
+        searchTerm={searchTerm}
+        onSearchInputChange={handleSearchInputChange}
+        onSearch={handleSearch}
+        onClearSearch={handleClearSearch}
+        filteredBoards={filteredBoards}
+        totalBoards={boards.length}
+        activeFilter={activeFilter}
+        getDisplayBoards={getDisplayBoards}
+        getGroupedBoards={getGroupedBoards}
+      />
 
-        {/* Filter Buttons */}
-        <div className="filter-buttons">
-          <button
-            className={`filter-button ${
-              activeFilter === "all" ? "active" : ""
-            }`}
-            onClick={() => handleFilterChange("all")}
-          >
-            All
-          </button>
-          <button
-            className={`filter-button ${
-              activeFilter === "recent" ? "active" : ""
-            }`}
-            onClick={() => handleFilterChange("recent")}
-          >
-            Recent
-          </button>
-          <button
-            className={`filter-button ${
-              activeFilter === "category" ? "active" : ""
-            }`}
-            onClick={() => handleFilterChange("category")}
-          >
-            By Category
-          </button>
-          <button
-            className={`filter-button create-filter ${
-              activeFilter === "create" ? "active" : ""
-            }`}
-            onClick={() => handleFilterChange("create")}
-          >
-            Create a New Board
-          </button>
-        </div>
-
-        {searchTerm && (
-          <div className="search-results-info">
-            Showing {filteredBoards.length} of {boards.length} boards
-            {searchTerm && ` for "${searchTerm}"`}
-          </div>
-        )}
-
-        {activeFilter === "recent" && !searchTerm && (
-          <div className="filter-info">
-            Showing boards created in the last 7 days (
-            {getDisplayBoards().length} boards)
-          </div>
-        )}
-
-        {activeFilter === "create" && !searchTerm && (
-          <div className="filter-info">
-            Create mode - Focus on adding new boards
-          </div>
-        )}
-
-        {activeFilter === "category" && !searchTerm && (
-          <div className="filter-info">
-            Boards grouped by category ({Object.keys(getGroupedBoards()).length}{" "}
-            categories)
-          </div>
-        )}
-      </div>
+      <FilterButtons
+        activeFilter={activeFilter}
+        onFilterChange={handleFilterChange}
+      />
 
       {activeFilter === "category" && !searchTerm ? (
-        /* Grouped by Category View */
-        <div className="category-grouped-view">
-          {/* Create new board card - show at top */}
-          {showCreateCard && (
-            <div className="create-card-section">
-              <BoardCard isCreateCard={true} onCreateNew={handleCreateNew} />
-            </div>
-          )}
-
-          {/* Category Groups */}
-          {Object.entries(getGroupedBoards()).map(
-            ([category, categoryBoards]) => (
-              <div key={category} className="category-group">
-                <div className="category-header">
-                  <h3 className="category-title">{category}</h3>
-                  <span className="category-count">
-                    ({categoryBoards.length} boards)
-                  </span>
-                </div>
-                <div className="boards-grid">
-                  {categoryBoards.map((board) => (
-                    <BoardCard
-                      key={board.id}
-                      board={board}
-                      onDelete={handleDeleteBoard}
-                      onCreateNew={handleCreateNew}
-                      onEdit={handleEditBoard}
-                    />
-                  ))}
-                </div>
-              </div>
-            )
-          )}
-
-          {Object.keys(getGroupedBoards()).length === 0 && (
-            <div className="no-categories-message">
-              <p>No boards to group by category yet.</p>
-            </div>
-          )}
-        </div>
+        <CategoryGroupView
+          showCreateCard={showCreateCard}
+          onCreateNew={handleCreateNew}
+          groupedBoards={getGroupedBoards()}
+          onDeleteBoard={handleDeleteBoard}
+          onEditBoard={handleEditBoard}
+        />
       ) : (
-        /* Regular Grid View */
-        <div className="boards-grid">
-          {/* Create new board card - show based on filter */}
-          {showCreateCard && (
-            <BoardCard isCreateCard={true} onCreateNew={handleCreateNew} />
-          )}
-
-          {/* Existing boards */}
-          {getDisplayBoards().map((board) => (
-            <BoardCard
-              key={board.id}
-              board={board}
-              onDelete={handleDeleteBoard}
-              onCreateNew={handleCreateNew}
-              onEdit={handleEditBoard}
-            />
-          ))}
-        </div>
+        <BoardGrid
+          showCreateCard={showCreateCard}
+          onCreateNew={handleCreateNew}
+          displayBoards={getDisplayBoards()}
+          onDeleteBoard={handleDeleteBoard}
+          onEditBoard={handleEditBoard}
+        />
       )}
 
       {boards.length === 0 && (
