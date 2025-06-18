@@ -118,6 +118,10 @@ const BoardList = () => {
       // Hide all boards, show only create card
       setFilteredBoards([]);
       setShowCreateCard(true);
+    } else if (filter === "category") {
+      // Group by category - we'll handle this in the display logic
+      setFilteredBoards(boards);
+      setShowCreateCard(true);
     }
   };
 
@@ -137,9 +141,36 @@ const BoardList = () => {
       });
     } else if (activeFilter === "create") {
       return [];
+    } else if (activeFilter === "category") {
+      return boards;
     }
 
     return boards;
+  };
+
+  const getGroupedBoards = () => {
+    const boardsToGroup = getDisplayBoards();
+    const grouped = {};
+
+    boardsToGroup.forEach((board) => {
+      const category = board.category || "Uncategorized";
+      if (!grouped[category]) {
+        grouped[category] = [];
+      }
+      grouped[category].push(board);
+    });
+
+    // Sort categories alphabetically and sort boards within each category by creation date (newest first)
+    const sortedGrouped = {};
+    Object.keys(grouped)
+      .sort()
+      .forEach((category) => {
+        sortedGrouped[category] = grouped[category].sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        );
+      });
+
+    return sortedGrouped;
   };
 
   useEffect(() => {
@@ -213,6 +244,14 @@ const BoardList = () => {
             Recent
           </button>
           <button
+            className={`filter-button ${
+              activeFilter === "category" ? "active" : ""
+            }`}
+            onClick={() => handleFilterChange("category")}
+          >
+            By Category
+          </button>
+          <button
             className={`filter-button create-filter ${
               activeFilter === "create" ? "active" : ""
             }`}
@@ -241,25 +280,76 @@ const BoardList = () => {
             Create mode - Focus on adding new boards
           </div>
         )}
-      </div>
 
-      <div className="boards-grid">
-        {/* Create new board card - show based on filter */}
-        {showCreateCard && (
-          <BoardCard isCreateCard={true} onCreateNew={handleCreateNew} />
+        {activeFilter === "category" && !searchTerm && (
+          <div className="filter-info">
+            Boards grouped by category ({Object.keys(getGroupedBoards()).length}{" "}
+            categories)
+          </div>
         )}
-
-        {/* Existing boards */}
-        {getDisplayBoards().map((board) => (
-          <BoardCard
-            key={board.id}
-            board={board}
-            onDelete={handleDeleteBoard}
-            onCreateNew={handleCreateNew}
-            onEdit={handleEditBoard}
-          />
-        ))}
       </div>
+
+      {activeFilter === "category" && !searchTerm ? (
+        /* Grouped by Category View */
+        <div className="category-grouped-view">
+          {/* Create new board card - show at top */}
+          {showCreateCard && (
+            <div className="create-card-section">
+              <BoardCard isCreateCard={true} onCreateNew={handleCreateNew} />
+            </div>
+          )}
+
+          {/* Category Groups */}
+          {Object.entries(getGroupedBoards()).map(
+            ([category, categoryBoards]) => (
+              <div key={category} className="category-group">
+                <div className="category-header">
+                  <h3 className="category-title">{category}</h3>
+                  <span className="category-count">
+                    ({categoryBoards.length} boards)
+                  </span>
+                </div>
+                <div className="boards-grid">
+                  {categoryBoards.map((board) => (
+                    <BoardCard
+                      key={board.id}
+                      board={board}
+                      onDelete={handleDeleteBoard}
+                      onCreateNew={handleCreateNew}
+                      onEdit={handleEditBoard}
+                    />
+                  ))}
+                </div>
+              </div>
+            )
+          )}
+
+          {Object.keys(getGroupedBoards()).length === 0 && (
+            <div className="no-categories-message">
+              <p>No boards to group by category yet.</p>
+            </div>
+          )}
+        </div>
+      ) : (
+        /* Regular Grid View */
+        <div className="boards-grid">
+          {/* Create new board card - show based on filter */}
+          {showCreateCard && (
+            <BoardCard isCreateCard={true} onCreateNew={handleCreateNew} />
+          )}
+
+          {/* Existing boards */}
+          {getDisplayBoards().map((board) => (
+            <BoardCard
+              key={board.id}
+              board={board}
+              onDelete={handleDeleteBoard}
+              onCreateNew={handleCreateNew}
+              onEdit={handleEditBoard}
+            />
+          ))}
+        </div>
+      )}
 
       {boards.length === 0 && (
         <div className="no-boards-message">
