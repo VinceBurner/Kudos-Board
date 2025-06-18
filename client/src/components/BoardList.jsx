@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
-import BoardCard from "./BoardCard";
+import SearchArea from "./SearchArea";
+import FilterButtons from "./FilterButtons";
+import CategoryGroupView from "./CategoryGroupView";
+import BoardGrid from "./BoardGrid";
 
 const BoardList = () => {
   const [boards, setBoards] = useState([]);
@@ -118,6 +121,10 @@ const BoardList = () => {
       // Hide all boards, show only create card
       setFilteredBoards([]);
       setShowCreateCard(true);
+    } else if (filter === "category") {
+      // Group by category - we'll handle this in the display logic
+      setFilteredBoards(boards);
+      setShowCreateCard(true);
     }
   };
 
@@ -137,9 +144,36 @@ const BoardList = () => {
       });
     } else if (activeFilter === "create") {
       return [];
+    } else if (activeFilter === "category") {
+      return boards;
     }
 
     return boards;
+  };
+
+  const getGroupedBoards = () => {
+    const boardsToGroup = getDisplayBoards();
+    const grouped = {};
+
+    boardsToGroup.forEach((board) => {
+      const category = board.category || "Uncategorized";
+      if (!grouped[category]) {
+        grouped[category] = [];
+      }
+      grouped[category].push(board);
+    });
+
+    // Sort categories alphabetically and sort boards within each category by creation date (newest first)
+    const sortedGrouped = {};
+    Object.keys(grouped)
+      .sort()
+      .forEach((category) => {
+        sortedGrouped[category] = grouped[category].sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        );
+      });
+
+    return sortedGrouped;
   };
 
   useEffect(() => {
@@ -176,90 +210,40 @@ const BoardList = () => {
     <div className="board-list">
       <h2>Kudos Boards ({boards.length})</h2>
 
-      {/* Search Area */}
-      <div className="search-area">
-        <div className="search-input-group">
-          <input
-            type="text"
-            placeholder="Search boards by title, category, or author..."
-            value={searchTerm}
-            onChange={handleSearchInputChange}
-            className="search-input"
-          />
-          <button onClick={handleSearch} className="search-button">
-            Search
-          </button>
-          <button onClick={handleClearSearch} className="clear-button">
-            Clear
-          </button>
-        </div>
+      <SearchArea
+        searchTerm={searchTerm}
+        onSearchInputChange={handleSearchInputChange}
+        onSearch={handleSearch}
+        onClearSearch={handleClearSearch}
+        filteredBoards={filteredBoards}
+        totalBoards={boards.length}
+        activeFilter={activeFilter}
+        getDisplayBoards={getDisplayBoards}
+        getGroupedBoards={getGroupedBoards}
+      />
 
-        {/* Filter Buttons */}
-        <div className="filter-buttons">
-          <button
-            className={`filter-button ${
-              activeFilter === "all" ? "active" : ""
-            }`}
-            onClick={() => handleFilterChange("all")}
-          >
-            All
-          </button>
-          <button
-            className={`filter-button ${
-              activeFilter === "recent" ? "active" : ""
-            }`}
-            onClick={() => handleFilterChange("recent")}
-          >
-            Recent
-          </button>
-          <button
-            className={`filter-button create-filter ${
-              activeFilter === "create" ? "active" : ""
-            }`}
-            onClick={() => handleFilterChange("create")}
-          >
-            Create a New Board
-          </button>
-        </div>
+      <FilterButtons
+        activeFilter={activeFilter}
+        onFilterChange={handleFilterChange}
+      />
 
-        {searchTerm && (
-          <div className="search-results-info">
-            Showing {filteredBoards.length} of {boards.length} boards
-            {searchTerm && ` for "${searchTerm}"`}
-          </div>
-        )}
-
-        {activeFilter === "recent" && !searchTerm && (
-          <div className="filter-info">
-            Showing boards created in the last 7 days (
-            {getDisplayBoards().length} boards)
-          </div>
-        )}
-
-        {activeFilter === "create" && !searchTerm && (
-          <div className="filter-info">
-            Create mode - Focus on adding new boards
-          </div>
-        )}
-      </div>
-
-      <div className="boards-grid">
-        {/* Create new board card - show based on filter */}
-        {showCreateCard && (
-          <BoardCard isCreateCard={true} onCreateNew={handleCreateNew} />
-        )}
-
-        {/* Existing boards */}
-        {getDisplayBoards().map((board) => (
-          <BoardCard
-            key={board.id}
-            board={board}
-            onDelete={handleDeleteBoard}
-            onCreateNew={handleCreateNew}
-            onEdit={handleEditBoard}
-          />
-        ))}
-      </div>
+      {activeFilter === "category" && !searchTerm ? (
+        <CategoryGroupView
+          showCreateCard={showCreateCard}
+          onCreateNew={handleCreateNew}
+          groupedBoards={getGroupedBoards()}
+          onDeleteBoard={handleDeleteBoard}
+          onEditBoard={handleEditBoard}
+        />
+      ) : (
+        <BoardGrid
+          showCreateCard={showCreateCard}
+          onCreateNew={handleCreateNew}
+          displayBoards={getDisplayBoards()}
+          onDeleteBoard={handleDeleteBoard}
+          onEditBoard={handleEditBoard}
+        />
+      )}
 
       {boards.length === 0 && (
         <div className="no-boards-message">
