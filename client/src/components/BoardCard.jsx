@@ -5,19 +5,24 @@ const BoardCard = ({
   onDelete,
   onCreateNew,
   onEdit,
+  onViewDetails,
   isCreateCard = false,
 }) => {
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [showEditForm, setShowEditForm] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
+    description: "",
     category: "",
     author: "",
+    image: "",
   });
   const [editFormData, setEditFormData] = useState({
     title: "",
+    description: "",
     category: "",
     author: "",
+    image: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -61,7 +66,13 @@ const BoardCard = ({
       const newBoard = await response.json();
 
       // Reset form and close
-      setFormData({ title: "", category: "", author: "" });
+      setFormData({
+        title: "",
+        description: "",
+        category: "",
+        author: "",
+        image: "",
+      });
       setShowCreateForm(false);
 
       // Notify parent component
@@ -77,15 +88,23 @@ const BoardCard = ({
 
   const handleCancelCreate = () => {
     setShowCreateForm(false);
-    setFormData({ title: "", category: "", author: "" });
+    setFormData({
+      title: "",
+      description: "",
+      category: "",
+      author: "",
+      image: "",
+    });
     setError("");
   };
 
   const handleEdit = () => {
     setEditFormData({
       title: board.title,
+      description: board.description || "",
       category: board.category,
       author: board.author,
+      image: board.image || "",
     });
     setShowEditForm(true);
   };
@@ -123,7 +142,13 @@ const BoardCard = ({
 
       // Close edit form
       setShowEditForm(false);
-      setEditFormData({ title: "", category: "", author: "" });
+      setEditFormData({
+        title: "",
+        description: "",
+        category: "",
+        author: "",
+        image: "",
+      });
 
       // Notify parent component
       if (onEdit) {
@@ -138,7 +163,13 @@ const BoardCard = ({
 
   const handleCancelEdit = () => {
     setShowEditForm(false);
-    setEditFormData({ title: "", category: "", author: "" });
+    setEditFormData({
+      title: "",
+      description: "",
+      category: "",
+      author: "",
+      image: "",
+    });
     setEditError("");
   };
 
@@ -182,6 +213,16 @@ const BoardCard = ({
               </div>
 
               <div className="form-group">
+                <textarea
+                  name="description"
+                  value={formData.description}
+                  onChange={handleFormChange}
+                  placeholder="Board description (optional)"
+                  rows="3"
+                />
+              </div>
+
+              <div className="form-group">
                 <select
                   name="category"
                   value={formData.category}
@@ -189,14 +230,9 @@ const BoardCard = ({
                   required
                 >
                   <option value="">Select category</option>
-                  <option value="Team Recognition">Team Recognition</option>
-                  <option value="Project Milestone">Project Milestone</option>
-                  <option value="Personal Achievement">
-                    Personal Achievement
-                  </option>
-                  <option value="Innovation">Innovation</option>
-                  <option value="Collaboration">Collaboration</option>
-                  <option value="Other">Other</option>
+                  <option value="celebration">Celebration</option>
+                  <option value="thank you">Thank You</option>
+                  <option value="inspiration">Inspiration</option>
                 </select>
               </div>
 
@@ -208,6 +244,16 @@ const BoardCard = ({
                   onChange={handleFormChange}
                   placeholder="Your name"
                   required
+                />
+              </div>
+
+              <div className="form-group">
+                <input
+                  type="url"
+                  name="image"
+                  value={formData.image}
+                  onChange={handleFormChange}
+                  placeholder="Image URL (optional)"
                 />
               </div>
 
@@ -245,25 +291,25 @@ const BoardCard = ({
             <h3 className="board-title">{board.title}</h3>
             <div className="board-actions">
               <button
-                className="create-button-small"
+                className="create-button-small modern-button success"
                 onClick={handleCreateNew}
                 title="Create new board"
               >
-                +
+                <span className="button-icon">✨</span>
               </button>
               <button
-                className="edit-button"
+                className="edit-button modern-button secondary"
                 onClick={handleEdit}
                 title="Edit board"
               >
-                ✎
+                <span className="button-icon">✏️</span>
               </button>
               <button
-                className="delete-button"
+                className="delete-button modern-button danger"
                 onClick={handleDelete}
                 title="Delete board"
               >
-                ×
+                <span className="button-icon">🗑️</span>
               </button>
             </div>
           </div>
@@ -299,6 +345,29 @@ const BoardCard = ({
                 {board.kudos ? board.kudos.length : 0}
               </span>
             </div>
+
+            {board.description && (
+              <div className="board-description">
+                <span className="description-label">Description:</span>
+                <p className="description-value">{board.description}</p>
+              </div>
+            )}
+          </div>
+
+          {board.image && (
+            <div className="board-image">
+              <img src={board.image} alt={board.title} />
+            </div>
+          )}
+
+          <div className="board-footer">
+            <button
+              className="view-details-button modern-button primary"
+              onClick={() => onViewDetails && onViewDetails(board.id)}
+            >
+              <span className="button-icon">👁️</span>
+              View Details
+            </button>
           </div>
         </>
       ) : (
@@ -317,6 +386,16 @@ const BoardCard = ({
             </div>
 
             <div className="form-group">
+              <textarea
+                name="description"
+                value={editFormData.description}
+                onChange={handleEditFormChange}
+                placeholder="Board description (optional)"
+                rows="3"
+              />
+            </div>
+
+            <div className="form-group">
               <select
                 name="category"
                 value={editFormData.category}
@@ -324,14 +403,9 @@ const BoardCard = ({
                 required
               >
                 <option value="">Select category</option>
-                <option value="Team Recognition">Team Recognition</option>
-                <option value="Project Milestone">Project Milestone</option>
-                <option value="Personal Achievement">
-                  Personal Achievement
-                </option>
-                <option value="Innovation">Innovation</option>
-                <option value="Collaboration">Collaboration</option>
-                <option value="Other">Other</option>
+                <option value="celebration">Celebration</option>
+                <option value="thank you">Thank You</option>
+                <option value="inspiration">Inspiration</option>
               </select>
             </div>
 
@@ -343,6 +417,16 @@ const BoardCard = ({
                 onChange={handleEditFormChange}
                 placeholder="Author name"
                 required
+              />
+            </div>
+
+            <div className="form-group">
+              <input
+                type="url"
+                name="image"
+                value={editFormData.image}
+                onChange={handleEditFormChange}
+                placeholder="Image URL (optional)"
               />
             </div>
 

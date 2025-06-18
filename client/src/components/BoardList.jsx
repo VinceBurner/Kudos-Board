@@ -1,18 +1,30 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import BoardCard from "./BoardCard";
+import CategoryFilter from "./CategoryFilter";
 
-const BoardList = () => {
+const BoardList = ({ onViewDetails }) => {
   const [boards, setBoards] = useState([]);
   const [filteredBoards, setFilteredBoards] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [activeFilter, setActiveFilter] = useState("all");
-  const [showCreateCard, setShowCreateCard] = useState(true);
+  const [showCreateForm, setShowCreateForm] = useState(false);
+  const [formData, setFormData] = useState({
+    title: "",
+    description: "",
+    category: "",
+    author: "",
+    image: "",
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [createError, setCreateError] = useState("");
 
-  const fetchBoards = async () => {
+  const fetchBoards = useCallback(async (showLoading = true) => {
     try {
-      setLoading(true);
+      if (showLoading) {
+        setLoading(true);
+      }
       const response = await fetch("http://localhost:5000/api/boards");
 
       if (!response.ok) {
@@ -21,12 +33,15 @@ const BoardList = () => {
 
       const boardsData = await response.json();
       setBoards(boardsData);
+      setError(""); // Clear any previous errors
     } catch (err) {
       setError(err.message);
     } finally {
-      setLoading(false);
+      if (showLoading) {
+        setLoading(false);
+      }
     }
-  };
+  }, []);
 
   const handleDeleteBoard = async (boardId) => {
     if (
@@ -57,8 +72,67 @@ const BoardList = () => {
     }
   };
 
+  const handleFormChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleCreateSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setCreateError("");
+
+    try {
+      const response = await fetch("http://localhost:5000/api/boards", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to create board");
+      }
+
+      const newBoard = await response.json();
+
+      // Add the new board to the local state
+      setBoards((prevBoards) => [...prevBoards, newBoard]);
+
+      // Reset form and close
+      setFormData({
+        title: "",
+        description: "",
+        category: "",
+        author: "",
+        image: "",
+      });
+      setShowCreateForm(false);
+    } catch (err) {
+      setCreateError(err.message);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleCancelCreate = () => {
+    setShowCreateForm(false);
+    setFormData({
+      title: "",
+      description: "",
+      category: "",
+      author: "",
+      image: "",
+    });
+    setCreateError("");
+  };
+
   const handleCreateNew = (newBoard) => {
-    // Add the new board to the local state
+    // Add the new board to the local state (for compatibility with BoardCard)
     setBoards((prevBoards) => [...prevBoards, newBoard]);
   };
 
@@ -98,27 +172,6 @@ const BoardList = () => {
   const handleFilterChange = (filter) => {
     setActiveFilter(filter);
     setSearchTerm(""); // Clear search when changing filters
-
-    if (filter === "all") {
-      setFilteredBoards(boards);
-      setShowCreateCard(true);
-    } else if (filter === "recent") {
-      // Show boards created in the last 7 days
-      const sevenDaysAgo = new Date();
-      sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-
-      const recentBoards = boards.filter((board) => {
-        const boardDate = new Date(board.createdAt);
-        return boardDate >= sevenDaysAgo;
-      });
-
-      setFilteredBoards(recentBoards);
-      setShowCreateCard(true);
-    } else if (filter === "create") {
-      // Hide all boards, show only create card
-      setFilteredBoards([]);
-      setShowCreateCard(true);
-    }
   };
 
   const getDisplayBoards = () => {
@@ -135,16 +188,47 @@ const BoardList = () => {
         const boardDate = new Date(board.createdAt);
         return boardDate >= sevenDaysAgo;
       });
-    } else if (activeFilter === "create") {
-      return [];
+    } else if (activeFilter === "celebration") {
+      return boards.filter((board) => board.category === "celebration");
+    } else if (activeFilter === "thank you") {
+      return boards.filter((board) => board.category === "thank you");
+    } else if (activeFilter === "inspiration") {
+      return boards.filter((board) => board.category === "inspiration");
     }
 
     return boards;
   };
 
+  const getBoardCounts = () => {
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+
+    return {
+      all: boards.length,
+      recent: boards.filter((board) => {
+        const boardDate = new Date(board.createdAt);
+        return boardDate >= sevenDaysAgo;
+      }).length,
+      celebration: boards.filter((board) => board.category === "celebration")
+        .length,
+      thankYou: boards.filter((board) => board.category === "thank you").length,
+      inspiration: boards.filter((board) => board.category === "inspiration")
+        .length,
+    };
+  };
+
   useEffect(() => {
     fetchBoards();
-  }, []);
+  }, [fetchBoards]);
+
+  // Real-time updates with polling
+  useEffect(() => {
+    const pollInterval = setInterval(() => {
+      fetchBoards(false); // Don't show loading spinner for polling
+    }, 10000); // Poll every 10 seconds
+
+    return () => clearInterval(pollInterval);
+  }, [fetchBoards]);
 
   useEffect(() => {
     // Update filtered boards when boards change
@@ -186,41 +270,28 @@ const BoardList = () => {
             onChange={handleSearchInputChange}
             className="search-input"
           />
-          <button onClick={handleSearch} className="search-button">
+          <button
+            onClick={handleSearch}
+            className="search-button modern-button primary"
+          >
+            <span className="button-icon">🔍</span>
             Search
           </button>
-          <button onClick={handleClearSearch} className="clear-button">
+          <button
+            onClick={handleClearSearch}
+            className="clear-button modern-button secondary"
+          >
+            <span className="button-icon">✕</span>
             Clear
           </button>
         </div>
 
-        {/* Filter Buttons */}
-        <div className="filter-buttons">
-          <button
-            className={`filter-button ${
-              activeFilter === "all" ? "active" : ""
-            }`}
-            onClick={() => handleFilterChange("all")}
-          >
-            All
-          </button>
-          <button
-            className={`filter-button ${
-              activeFilter === "recent" ? "active" : ""
-            }`}
-            onClick={() => handleFilterChange("recent")}
-          >
-            Recent
-          </button>
-          <button
-            className={`filter-button create-filter ${
-              activeFilter === "create" ? "active" : ""
-            }`}
-            onClick={() => handleFilterChange("create")}
-          >
-            Create a New Board
-          </button>
-        </div>
+        {/* Category Filter */}
+        <CategoryFilter
+          activeFilter={activeFilter}
+          onFilterChange={handleFilterChange}
+          boardCounts={getBoardCounts()}
+        />
 
         {searchTerm && (
           <div className="search-results-info">
@@ -241,14 +312,118 @@ const BoardList = () => {
             Create mode - Focus on adding new boards
           </div>
         )}
+
+        {/* Create New Board Button */}
+        <div className="create-board-section">
+          {!showCreateForm ? (
+            <button
+              onClick={() => setShowCreateForm(true)}
+              className="create-board-button modern-button primary"
+            >
+              <span className="button-icon">✨</span>
+              Create New Board
+            </button>
+          ) : (
+            <div className="create-board-form modern-form">
+              <div className="form-header">
+                <h3>
+                  <span className="form-icon">🎯</span>
+                  Create New Kudos Board
+                </h3>
+                <p className="form-subtitle">
+                  Start building recognition and appreciation
+                </p>
+              </div>
+              <form onSubmit={handleCreateSubmit} className="board-form">
+                <div className="form-row">
+                  <div className="form-group">
+                    <input
+                      type="text"
+                      name="title"
+                      value={formData.title}
+                      onChange={handleFormChange}
+                      placeholder="Board title"
+                      required
+                    />
+                  </div>
+                  <div className="form-group">
+                    <select
+                      name="category"
+                      value={formData.category}
+                      onChange={handleFormChange}
+                      required
+                    >
+                      <option value="">Select category</option>
+                      <option value="celebration">Celebration</option>
+                      <option value="thank you">Thank You</option>
+                      <option value="inspiration">Inspiration</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="form-row">
+                  <div className="form-group">
+                    <input
+                      type="text"
+                      name="author"
+                      value={formData.author}
+                      onChange={handleFormChange}
+                      placeholder="Your name"
+                      required
+                    />
+                  </div>
+                  <div className="form-group">
+                    <input
+                      type="url"
+                      name="image"
+                      value={formData.image}
+                      onChange={handleFormChange}
+                      placeholder="Image URL (optional)"
+                    />
+                  </div>
+                </div>
+
+                <div className="form-group">
+                  <textarea
+                    name="description"
+                    value={formData.description}
+                    onChange={handleFormChange}
+                    placeholder="Board description (optional)"
+                    rows="2"
+                  />
+                </div>
+
+                {createError && (
+                  <div className="error-message">{createError}</div>
+                )}
+
+                <div className="form-buttons">
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="submit-button modern-button primary"
+                  >
+                    <span className="button-icon">
+                      {isSubmitting ? "⏳" : "🎯"}
+                    </span>
+                    {isSubmitting ? "Creating..." : "Create Board"}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleCancelCreate}
+                    className="cancel-button modern-button secondary"
+                  >
+                    <span className="button-icon">✕</span>
+                    Cancel
+                  </button>
+                </div>
+              </form>
+            </div>
+          )}
+        </div>
       </div>
 
       <div className="boards-grid">
-        {/* Create new board card - show based on filter */}
-        {showCreateCard && (
-          <BoardCard isCreateCard={true} onCreateNew={handleCreateNew} />
-        )}
-
         {/* Existing boards */}
         {getDisplayBoards().map((board) => (
           <BoardCard
@@ -257,6 +432,7 @@ const BoardList = () => {
             onDelete={handleDeleteBoard}
             onCreateNew={handleCreateNew}
             onEdit={handleEditBoard}
+            onViewDetails={onViewDetails}
           />
         ))}
       </div>
