@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { getRandomCardImage, getPicsumImage } from "../utils/randomImages";
 
 const BoardDetails = () => {
   const { boardId } = useParams();
@@ -11,6 +12,7 @@ const BoardDetails = () => {
   const [newCard, setNewCard] = useState({
     message: "",
     author: "",
+    image: "",
   });
   const [upvotingCards, setUpvotingCards] = useState(new Set());
 
@@ -50,39 +52,36 @@ const BoardDetails = () => {
     }
 
     try {
-      // Create a new kudos card with upvotes initialized to 0
-      const updatedKudos = [
-        ...board.kudos,
-        {
-          id: Date.now(),
-          message: newCard.message,
-          author: newCard.author,
-          upvotes: 0,
-          createdAt: new Date().toISOString(),
-        },
-      ];
-
+      // Create a new kudos card using the proper API endpoint
       const response = await fetch(
-        `http://localhost:5000/api/boards/${boardId}`,
+        `http://localhost:5000/api/boards/${boardId}/cards`,
         {
-          method: "PUT",
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            ...board,
-            kudos: updatedKudos,
+            message: newCard.message.trim(),
+            author: newCard.author.trim(),
+            image: newCard.image.trim() || null,
           }),
         }
       );
 
       if (!response.ok) {
-        throw new Error("Failed to add card");
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to add card");
       }
 
-      const updatedBoard = await response.json();
-      setBoard(updatedBoard);
-      setNewCard({ message: "", author: "" });
+      const newCardData = await response.json();
+
+      // Update the board state with the new card
+      setBoard((prevBoard) => ({
+        ...prevBoard,
+        kudos: [...prevBoard.kudos, newCardData],
+      }));
+
+      setNewCard({ message: "", author: "", image: "" });
       setShowAddCardForm(false);
     } catch (err) {
       setError(err.message);
@@ -98,7 +97,7 @@ const BoardDetails = () => {
       setUpvotingCards((prev) => new Set(prev).add(cardId));
 
       const response = await fetch(
-        `http://localhost:5000/api/boards/${boardId}/cards/${cardId}/upvote`,
+        `http://localhost:5000/api/cards/${cardId}/upvote`,
         {
           method: "POST",
           headers: {
@@ -108,11 +107,19 @@ const BoardDetails = () => {
       );
 
       if (!response.ok) {
-        throw new Error("Failed to upvote card");
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to upvote card");
       }
 
       const result = await response.json();
-      setBoard(result.board);
+
+      // Update the specific card in the board state
+      setBoard((prevBoard) => ({
+        ...prevBoard,
+        kudos: prevBoard.kudos.map((card) =>
+          card.id === cardId ? result.card : card
+        ),
+      }));
     } catch (err) {
       setError(err.message);
     } finally {
@@ -130,28 +137,26 @@ const BoardDetails = () => {
     }
 
     try {
-      const updatedKudos = board.kudos.filter((card) => card.id !== cardId);
-
       const response = await fetch(
-        `http://localhost:5000/api/boards/${boardId}`,
+        `http://localhost:5000/api/cards/${cardId}`,
         {
-          method: "PUT",
+          method: "DELETE",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            ...board,
-            kudos: updatedKudos,
-          }),
         }
       );
 
       if (!response.ok) {
-        throw new Error("Failed to delete card");
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to delete card");
       }
 
-      const updatedBoard = await response.json();
-      setBoard(updatedBoard);
+      // Update the board state by removing the deleted card
+      setBoard((prevBoard) => ({
+        ...prevBoard,
+        kudos: prevBoard.kudos.filter((card) => card.id !== cardId),
+      }));
     } catch (err) {
       setError(err.message);
     }
@@ -328,6 +333,63 @@ const BoardDetails = () => {
                     className="modern-input"
                   />
                 </div>
+                <div className="form-group">
+                  <label htmlFor="cardImage" className="form-label">
+                    <span className="label-icon">🖼️</span>
+                    Card Image (Optional)
+                  </label>
+                  <input
+                    id="cardImage"
+                    type="url"
+                    value={newCard.image}
+                    onChange={(e) =>
+                      setNewCard({ ...newCard, image: e.target.value })
+                    }
+                    placeholder="Enter image URL or use random buttons below"
+                    className="modern-input"
+                  />
+                  <div className="random-image-buttons">
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setNewCard({
+                          ...newCard,
+                          image: getRandomCardImage(false),
+                        })
+                      }
+                      className="random-button"
+                      title="Get random motivational image"
+                    >
+                      🎨 Random Image
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setNewCard({
+                          ...newCard,
+                          image: getRandomCardImage(true),
+                        })
+                      }
+                      className="random-button"
+                      title="Get random celebration GIF"
+                    >
+                      🎉 Random GIF
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setNewCard({
+                          ...newCard,
+                          image: getPicsumImage(400, 300),
+                        })
+                      }
+                      className="random-button"
+                      title="Get random photo from Picsum"
+                    >
+                      📷 Random Photo
+                    </button>
+                  </div>
+                </div>
                 <div className="form-buttons">
                   <button
                     type="submit"
@@ -340,7 +402,7 @@ const BoardDetails = () => {
                     type="button"
                     onClick={() => {
                       setShowAddCardForm(false);
-                      setNewCard({ message: "", author: "" });
+                      setNewCard({ message: "", author: "", image: "" });
                     }}
                     className="cancel-button modern-button secondary"
                   >
@@ -360,6 +422,18 @@ const BoardDetails = () => {
             ) : (
               board.kudos.map((card) => (
                 <div key={card.id} className="kudos-card">
+                  {card.image && (
+                    <div className="card-image">
+                      <img
+                        src={card.image}
+                        alt="Card visual"
+                        className="card-img"
+                        onError={(e) => {
+                          e.target.style.display = "none";
+                        }}
+                      />
+                    </div>
+                  )}
                   <div className="card-content">
                     <p className="card-message">{card.message}</p>
                   </div>

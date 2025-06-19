@@ -1,4 +1,9 @@
 import React, { useState } from "react";
+import {
+  getRandomBoardImage,
+  getRandomGradient,
+  getPicsumImage,
+} from "../utils/randomImages";
 
 const CreateBoardForm = ({ onCreateNew, onCancel }) => {
   const [formData, setFormData] = useState({
@@ -110,6 +115,41 @@ const CreateBoardForm = ({ onCreateNew, onCancel }) => {
               onChange={handleFormChange}
               placeholder="Wallpaper image URL (optional)"
             />
+            <div className="random-image-buttons">
+              <button
+                type="button"
+                onClick={() =>
+                  setFormData({
+                    ...formData,
+                    image: getRandomBoardImage(formData.category),
+                  })
+                }
+                className="random-button"
+                title="Get random image based on category"
+              >
+                🎲 Random Image
+              </button>
+              <button
+                type="button"
+                onClick={() =>
+                  setFormData({ ...formData, image: getRandomGradient() })
+                }
+                className="random-button"
+                title="Get random gradient background"
+              >
+                🌈 Random Gradient
+              </button>
+              <button
+                type="button"
+                onClick={() =>
+                  setFormData({ ...formData, image: getPicsumImage() })
+                }
+                className="random-button"
+                title="Get random photo from Picsum"
+              >
+                📸 Random Photo
+              </button>
+            </div>
           </div>
 
           {error && <div className="error-message">{error}</div>}

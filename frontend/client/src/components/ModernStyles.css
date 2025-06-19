@@ -731,6 +731,162 @@
   white-space: nowrap;
 }
 
+/* Random Image Buttons */
+.random-image-buttons {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.random-button {
+  padding: 0.5rem 0.75rem;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 0.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  white-space: nowrap;
+}
+
+.random-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.random-button:active {
+  transform: translateY(0);
+}
+
+/* For CreateBoardForm random buttons (different styling) */
+.create-board-form .random-button {
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.create-board-form .random-button:hover {
+  background: linear-gradient(135deg, #3d9bfe 0%, #00e0fe 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Card Image Styles */
+.card-image {
+  margin-bottom: 1rem;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  background: #f8f9fa;
+  position: relative;
+}
+
+.card-img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.2s ease-in-out;
+}
+
+.card-img:hover {
+  transform: scale(1.02);
+}
+
+/* Handle GIFs and images that might not load */
+.card-img[src*="giphy.gif"] {
+  height: 150px;
+  object-fit: contain;
+  background: #000;
+}
+
+.card-img[src*="picsum.photos"] {
+  height: 180px;
+}
+
+/* Board image preview in form */
+.image-preview {
+  margin-top: 0.5rem;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  max-height: 200px;
+}
+
+.image-preview img {
+  width: 100%;
+  height: auto;
+  max-height: 200px;
+  object-fit: cover;
+  display: block;
+}
+
+/* Gradient backgrounds for boards */
+.board-card[style*="linear-gradient"] {
+  color: white;
+}
+
+.board-card[style*="linear-gradient"] .board-title,
+.board-card[style*="linear-gradient"] .card-message,
+.board-card[style*="linear-gradient"] .card-author {
+  color: white;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.board-card[style*="linear-gradient"] .meta-label,
+.board-card[style*="linear-gradient"] .meta-value {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Loading state for images */
+.card-img[src=""] {
+  display: none;
+}
+
+.card-image:empty {
+  display: none;
+}
+
+/* Error handling for broken images */
+.card-img[alt="Card visual"]:not([src]),
+.card-img[alt="Card visual"][src=""] {
+  display: none;
+}
+
+/* Responsive adjustments for images */
+@media (max-width: 768px) {
+  .random-image-buttons {
+    justify-content: center;
+  }
+
+  .random-button {
+    font-size: 0.75rem;
+    padding: 0.4rem 0.6rem;
+  }
+
+  .card-img {
+    height: 150px;
+  }
+
+  .card-img[src*="giphy.gif"] {
+    height: 120px;
+  }
+}
+
 /* Responsive adjustments for wallpaper */
 @media (max-width: 768px) {
   .board-details-content {
