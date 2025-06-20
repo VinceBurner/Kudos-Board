@@ -35,7 +35,7 @@ const BoardCard = ({ board, onDelete, onCreateNew, isCreateCard = false }) => {
     setError("");
 
     try {
-      const response = await fetch(`${process.env.API_URL}/api/boards`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/boards`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -37,7 +37,7 @@ const RegularBoardCard = ({ board, onDelete, onEdit }) => {
 
     try {
       const response = await fetch(
-        `${import.meta.env.process.env.API_URL}/api/boards/${board.id}`,
+        `${process.env.REACT_APP_API_URL}/api/boards/${board.id}`,
         {
           method: "PUT",
           headers: {
