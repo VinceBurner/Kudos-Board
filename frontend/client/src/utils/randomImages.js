@@ -150,22 +150,7 @@ const CARD_GIF_CATEGORIES = {
   ],
 };
 
-// Fallback images in case APIs fail
-const FALLBACK_BOARD_IMAGES = [
-  "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&h=600&fit=crop",
-  "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=800&h=600&fit=crop",
-  "https://images.unsplash.com/photo-1556761175-b413da4baf72?w=800&h=600&fit=crop",
-  "https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=800&h=600&fit=crop",
-  "https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&h=600&fit=crop",
-];
-
-const FALLBACK_CARD_IMAGES = [
-  "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=400&h=300&fit=crop",
-  "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=400&h=300&fit=crop",
-  "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=400&h=300&fit=crop",
-  "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop",
-];
-
+// Fallback GIFs in case APIs fail
 const FALLBACK_GIFS = [
   "https://media.giphy.com/media/3o7abKhOpu0NwenH3O/giphy.gif",
   "https://media.giphy.com/media/26u4cqiYI30juCOGY/giphy.gif",
@@ -176,35 +161,16 @@ const FALLBACK_GIFS = [
 // API Functions
 
 /**
- * Fetch random image from Unsplash API
- * @param {string} query - Search query
- * @param {number} width - Image width
- * @param {number} height - Image height
- * @returns {Promise<string>} Image URL
- */
-const fetchUnsplashImage = async (query, width = 800, height = 600) => {
-  try {
-    // Using Unsplash Source API (no API key required)
-    const searchTerm = encodeURIComponent(query);
-    const url = `https://source.unsplash.com/${width}x${height}/?${searchTerm}`;
-    return url;
-  } catch (error) {
-    console.warn("Unsplash API failed, using fallback:", error);
-    return null;
-  }
-};
-
-/**
  * Fetch random GIF from Giphy API
  * @param {string} query - Search query
  * @returns {Promise<string>} GIF URL
  */
 const fetchGiphyGif = async (query) => {
   try {
-    // Using Giphy's public API endpoint (no key required for basic usage)
+    const apiKey = process.env.REACT_APP_GIPHY_API_KEY || "demo";
     const searchTerm = encodeURIComponent(query);
     const response = await fetch(
-      `https://api.giphy.com/v1/gifs/search?api_key=demo&q=${searchTerm}&limit=20&rating=g`
+      `https://api.giphy.com/v1/gifs/search?api_key=${apiKey}&q=${searchTerm}&limit=20&rating=g`
     );
 
     if (!response.ok) {
@@ -222,6 +188,57 @@ const fetchGiphyGif = async (query) => {
   } catch (error) {
     console.warn("Giphy API failed, using fallback:", error);
     return null;
+  }
+};
+
+/**
+ * Search for GIFs based on user query
+ * @param {string} query - User search query
+ * @param {number} limit - Number of GIFs to return (default: 12)
+ * @returns {Promise<Array>} Array of GIF objects with url and title
+ */
+export const searchGifs = async (query, limit = 12) => {
+  try {
+    // Temporarily hardcode the API key to test
+    const apiKey = "791XtUIcq4jKiB7v2QWsSnHwY9IdGiQE";
+    const searchTerm = encodeURIComponent(query);
+    const url = `https://api.giphy.com/v1/gifs/search?api_key=${apiKey}&q=${searchTerm}&limit=${limit}&rating=g`;
+
+    console.log("Making API request to:", url); // Debug log
+    console.log("Using API key:", apiKey.substring(0, 10) + "..."); // Debug log (partial key)
+    console.log("Environment variable:", process.env.REACT_APP_GIPHY_API_KEY); // Debug log
+
+    const response = await fetch(url);
+
+    console.log("API response status:", response.status); // Debug log
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error("API error response:", errorText); // Debug log
+      throw new Error(
+        `Giphy API request failed: ${response.status} ${errorText}`
+      );
+    }
+
+    const data = await response.json();
+    console.log("API response data:", data); // Debug log
+
+    if (data.data && data.data.length > 0) {
+      const results = data.data.map((gif) => ({
+        id: gif.id,
+        url: gif.images.fixed_height.url,
+        title: gif.title,
+        preview: gif.images.fixed_height_small.url,
+      }));
+      console.log("Processed results:", results); // Debug log
+      return results;
+    }
+
+    console.log("No GIFs found in API response"); // Debug log
+    return [];
+  } catch (error) {
+    console.error("Giphy search failed:", error);
+    return [];
   }
 };
 

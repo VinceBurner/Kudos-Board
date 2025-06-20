@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { getRandomCardImage } from "../utils/randomImages";
+import GifSearchModal from "./GifSearchModal";
 
 const BoardDetails = () => {
   const { boardId } = useParams();
@@ -16,6 +16,7 @@ const BoardDetails = () => {
   });
   const [upvotingCards, setUpvotingCards] = useState(new Set());
   const [pinningCards, setPinningCards] = useState(new Set());
+  const [isGifSearchOpen, setIsGifSearchOpen] = useState(false);
 
   const fetchBoard = useCallback(
     async (showLoading = true) => {
@@ -207,6 +208,13 @@ const BoardDetails = () => {
     }
   };
 
+  const handleGifSelect = (gifUrl) => {
+    setNewCard({
+      ...newCard,
+      image: gifUrl,
+    });
+  };
+
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleDateString("en-US", {
@@ -347,78 +355,26 @@ const BoardDetails = () => {
                     placeholder="Enter image URL or use random buttons below"
                     className="modern-input"
                   />
-                  <div className="random-image-buttons">
-                    <button
-                      type="button"
-                      onClick={async () => {
-                        const gifUrl = await getRandomCardImage("celebration");
-                        setNewCard({
-                          ...newCard,
-                          image: gifUrl,
-                        });
-                      }}
-                      className="random-button"
-                      title="Get celebration GIF"
-                    >
-                      🎉 Celebration
-                    </button>
-                    <button
-                      type="button"
-                      onClick={async () => {
-                        const gifUrl = await getRandomCardImage("appreciation");
-                        setNewCard({
-                          ...newCard,
-                          image: gifUrl,
-                        });
-                      }}
-                      className="random-button"
-                      title="Get appreciation GIF"
-                    >
-                      💖 Appreciation
-                    </button>
-                    <button
-                      type="button"
-                      onClick={async () => {
-                        const gifUrl = await getRandomCardImage("success");
-                        setNewCard({
-                          ...newCard,
-                          image: gifUrl,
-                        });
-                      }}
-                      className="random-button"
-                      title="Get success GIF"
-                    >
-                      🏆 Success
-                    </button>
-                    <button
-                      type="button"
-                      onClick={async () => {
-                        const gifUrl = await getRandomCardImage("motivation");
-                        setNewCard({
-                          ...newCard,
-                          image: gifUrl,
-                        });
-                      }}
-                      className="random-button"
-                      title="Get motivation GIF"
-                    >
-                      💪 Motivation
-                    </button>
-                    <button
-                      type="button"
-                      onClick={async () => {
-                        const gifUrl = await getRandomCardImage("fun");
-                        setNewCard({
-                          ...newCard,
-                          image: gifUrl,
-                        });
-                      }}
-                      className="random-button"
-                      title="Get fun GIF"
-                    >
-                      🤩 Fun
-                    </button>
-                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setIsGifSearchOpen(true)}
+                    className="search-gif-button"
+                    style={{
+                      width: "100%",
+                      padding: "12px",
+                      marginTop: "8px",
+                      backgroundColor: "#007bff",
+                      color: "white",
+                      border: "none",
+                      borderRadius: "4px",
+                      cursor: "pointer",
+                      fontSize: "16px",
+                      fontWeight: "bold",
+                    }}
+                    title="Search for GIFs"
+                  >
+                    🔍 Search for GIFs
+                  </button>
                 </div>
                 <div className="form-buttons">
                   <button
@@ -529,6 +485,12 @@ const BoardDetails = () => {
           </div>
         </div>
       </div>
+
+      <GifSearchModal
+        isOpen={isGifSearchOpen}
+        onClose={() => setIsGifSearchOpen(false)}
+        onSelectGif={handleGifSelect}
+      />
     </div>
   );
 };

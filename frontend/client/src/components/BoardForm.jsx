@@ -1,18 +1,28 @@
 import React, { useState } from "react";
+import GifSearchModal from "./GifSearchModal";
 
 const BoardForm = ({ onBoardCreated }) => {
   const [formData, setFormData] = useState({
     title: "",
     category: "",
     author: "",
+    image: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
+  const [isGifSearchOpen, setIsGifSearchOpen] = useState(false);
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleGifSelect = (gifUrl) => {
+    setFormData({
+      ...formData,
+      image: gifUrl,
     });
   };
 
@@ -42,6 +52,7 @@ const BoardForm = ({ onBoardCreated }) => {
         title: "",
         category: "",
         author: "",
+        image: "",
       });
 
       // Notify parent component
@@ -104,12 +115,50 @@ const BoardForm = ({ onBoardCreated }) => {
           />
         </div>
 
+        <div className="form-group">
+          <label htmlFor="image">Board Image (Optional):</label>
+          <input
+            type="url"
+            id="image"
+            name="image"
+            value={formData.image}
+            onChange={handleChange}
+            placeholder="Enter image URL or use search below"
+          />
+          <button
+            type="button"
+            onClick={() => setIsGifSearchOpen(true)}
+            className="search-gif-button"
+            style={{
+              width: "100%",
+              padding: "12px",
+              marginTop: "8px",
+              backgroundColor: "#007bff",
+              color: "white",
+              border: "none",
+              borderRadius: "4px",
+              cursor: "pointer",
+              fontSize: "16px",
+              fontWeight: "bold",
+            }}
+            title="Search for GIFs"
+          >
+            🔍 Search for GIFs
+          </button>
+        </div>
+
         {error && <div className="error-message">{error}</div>}
 
         <button type="submit" disabled={isSubmitting}>
           {isSubmitting ? "Creating..." : "Create Board"}
         </button>
       </form>
+
+      <GifSearchModal
+        isOpen={isGifSearchOpen}
+        onClose={() => setIsGifSearchOpen(false)}
+        onSelectGif={handleGifSelect}
+      />
     </div>
   );
 };

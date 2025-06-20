@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { getRandomBoardImage, getRandomGradient } from "../utils/randomImages";
+import GifSearchModal from "./GifSearchModal";
 
 const CreateBoardForm = ({ onCreateNew, onCancel }) => {
   const [formData, setFormData] = useState({
@@ -11,6 +11,7 @@ const CreateBoardForm = ({ onCreateNew, onCancel }) => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
+  const [isGifSearchOpen, setIsGifSearchOpen] = useState(false);
 
   const handleFormChange = (e) => {
     setFormData({
@@ -70,6 +71,13 @@ const CreateBoardForm = ({ onCreateNew, onCancel }) => {
     if (onCancel) {
       onCancel();
     }
+  };
+
+  const handleGifSelect = (gifUrl) => {
+    setFormData({
+      ...formData,
+      image: gifUrl,
+    });
   };
 
   return (
@@ -132,35 +140,28 @@ const CreateBoardForm = ({ onCreateNew, onCancel }) => {
               name="image"
               value={formData.image}
               onChange={handleFormChange}
-              placeholder="Board GIF/image URL (required)"
-              required
+              placeholder="Board GIF/image URL (optional - or search below)"
             />
-            <div className="random-image-buttons">
-              <button
-                type="button"
-                onClick={async () => {
-                  const gifUrl = await getRandomBoardImage(formData.category);
-                  setFormData({
-                    ...formData,
-                    image: gifUrl,
-                  });
-                }}
-                className="random-button"
-                title="Get random GIF based on category"
-              >
-                🎉 Random GIF
-              </button>
-              <button
-                type="button"
-                onClick={() =>
-                  setFormData({ ...formData, image: getRandomGradient() })
-                }
-                className="random-button"
-                title="Get random gradient background"
-              >
-                🌈 Random Gradient
-              </button>
-            </div>
+            <button
+              type="button"
+              onClick={() => setIsGifSearchOpen(true)}
+              className="search-gif-button"
+              style={{
+                width: "100%",
+                padding: "12px",
+                marginTop: "8px",
+                backgroundColor: "#007bff",
+                color: "white",
+                border: "none",
+                borderRadius: "4px",
+                cursor: "pointer",
+                fontSize: "16px",
+                fontWeight: "bold",
+              }}
+              title="Search for GIFs"
+            >
+              🔍 Search for GIFs
+            </button>
           </div>
 
           {error && <div className="error-message">{error}</div>}
@@ -183,6 +184,12 @@ const CreateBoardForm = ({ onCreateNew, onCancel }) => {
           </div>
         </form>
       </div>
+
+      <GifSearchModal
+        isOpen={isGifSearchOpen}
+        onClose={() => setIsGifSearchOpen(false)}
+        onSelectGif={handleGifSelect}
+      />
     </div>
   );
 };
