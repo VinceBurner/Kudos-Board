@@ -1,6 +1,10 @@
 import React, { useState, useEffect, useCallback } from "react";
 import BoardCard from "./BoardCard";
 import CategoryFilter from "./CategoryFilter";
+import {
+  getRandomBoardImage,
+  getRandomGradient,
+} from "../utils/randomImages";
 
 const BoardList = () => {
   const [boards, setBoards] = useState([]);
@@ -389,6 +393,37 @@ const BoardList = () => {
                       onChange={handleFormChange}
                       placeholder="Image URL (optional)"
                     />
+                    <div className="random-image-buttons">
+                      <button
+                        type="button"
+                        onClick={async () => {
+                          const gifUrl = await getRandomBoardImage(
+                            formData.category
+                          );
+                          setFormData({
+                            ...formData,
+                            image: gifUrl,
+                          });
+                        }}
+                        className="random-button"
+                        title="Get random GIF based on category"
+                      >
+                        🎉 Random GIF
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setFormData({
+                            ...formData,
+                            image: getRandomGradient(),
+                          })
+                        }
+                        className="random-button"
+                        title="Get random gradient background"
+                      >
+                        🌈 Random Gradient
+                      </button>
+                    </div>
                   </div>
                 </div>
 

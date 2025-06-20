@@ -1,102 +1,280 @@
-// Random image utility functions for boards and cards
+// GIF-focused random image utility for boards and cards
 
-// Predefined categories of images for different board types
-const IMAGE_CATEGORIES = {
+// GIF Categories for different board types
+const BOARD_GIF_CATEGORIES = {
   "Team Recognition": [
-    "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&h=600&fit=crop",
-    "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=800&h=600&fit=crop",
-    "https://images.unsplash.com/photo-1556761175-b413da4baf72?w=800&h=600&fit=crop",
-    "https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=800&h=600&fit=crop",
-    "https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&h=600&fit=crop",
+    "team celebration",
+    "high five",
+    "teamwork",
+    "office party",
+    "group hug",
+    "collaboration",
+    "team success",
+    "office celebration",
   ],
   "Project Milestone": [
-    "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=600&fit=crop",
-    "https://images.unsplash.com/photo-1553877522-43269d4ea984?w=800&h=600&fit=crop",
-    "https://images.unsplash.com/photo-1559136555-9303baea8ebd?w=800&h=600&fit=crop",
-    "https://images.unsplash.com/photo-1486312338219-ce68e2c6b696?w=800&h=600&fit=crop",
-    "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=600&fit=crop",
+    "success",
+    "achievement",
+    "goal",
+    "milestone",
+    "project complete",
+    "finish line",
+    "victory dance",
+    "mission accomplished",
   ],
   "Personal Achievement": [
-    "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=800&h=600&fit=crop",
-    "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=800&h=600&fit=crop",
-    "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=800&h=600&fit=crop",
-    "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=600&fit=crop",
-    "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=800&h=600&fit=crop",
+    "winner",
+    "trophy",
+    "personal success",
+    "achievement unlocked",
+    "level up",
+    "you did it",
+    "proud moment",
+    "celebration dance",
   ],
   Innovation: [
-    "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&h=600&fit=crop",
-    "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=800&h=600&fit=crop",
-    "https://images.unsplash.com/photo-1535378917042-10a22c95931a?w=800&h=600&fit=crop",
-    "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&h=600&fit=crop",
-    "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=800&h=600&fit=crop",
+    "innovation",
+    "creative",
+    "idea",
+    "lightbulb moment",
+    "breakthrough",
+    "genius",
+    "eureka",
+    "mind blown",
   ],
   Collaboration: [
-    "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=800&h=600&fit=crop",
-    "https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=800&h=600&fit=crop",
-    "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&h=600&fit=crop",
-    "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=800&h=600&fit=crop",
-    "https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?w=800&h=600&fit=crop",
+    "teamwork",
+    "partnership",
+    "together",
+    "unity",
+    "helping hands",
+    "support",
+    "cooperation",
+    "working together",
+  ],
+  celebration: [
+    "party",
+    "celebration",
+    "confetti",
+    "balloons",
+    "happy",
+    "joy",
+    "festive",
+    "party time",
+  ],
+  "thank you": [
+    "thank you",
+    "grateful",
+    "appreciation",
+    "thanks",
+    "gratitude",
+    "heart",
+    "love",
+    "thankful",
+  ],
+  inspiration: [
+    "inspiration",
+    "motivation",
+    "positive",
+    "energy",
+    "uplifting",
+    "encouraging",
+    "believe",
+    "you can do it",
   ],
   Other: [
-    "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop",
-    "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800&h=600&fit=crop",
-    "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&h=600&fit=crop",
-    "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop",
-    "https://images.unsplash.com/photo-1518837695005-2083093ee35b?w=800&h=600&fit=crop",
+    "positive vibes",
+    "good job",
+    "well done",
+    "awesome",
+    "amazing",
+    "fantastic",
+    "excellent",
+    "outstanding",
   ],
 };
 
-// Fun GIFs for kudos cards
-const KUDOS_GIFS = [
-  "https://media.giphy.com/media/3o7abKhOpu0NwenH3O/giphy.gif", // Thumbs up
-  "https://media.giphy.com/media/26u4cqiYI30juCOGY/giphy.gif", // Clapping
-  "https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif", // High five
-  "https://media.giphy.com/media/3o6Zt6KHxJTbXCnSvu/giphy.gif", // Celebration
-  "https://media.giphy.com/media/26u4lOMA8JKSnL9Uk/giphy.gif", // Party
-  "https://media.giphy.com/media/3o7abAHdYvZdBNnGZq/giphy.gif", // Applause
-  "https://media.giphy.com/media/26u4b45b8KlFpqSuQ/giphy.gif", // Cheering
-  "https://media.giphy.com/media/l0MYGb1LuZ3n7dRnO/giphy.gif", // Success
-  "https://media.giphy.com/media/26u4cS6zAgvkQXyj6/giphy.gif", // Victory
-  "https://media.giphy.com/media/3o7absbD7PbTFQa0c8/giphy.gif", // Awesome
+// Card-specific GIF terms for kudos
+const CARD_GIF_CATEGORIES = {
+  celebration: [
+    "thumbs up",
+    "clapping",
+    "high five",
+    "celebration",
+    "party",
+    "applause",
+    "cheering",
+    "confetti",
+    "balloons",
+    "happy dance",
+  ],
+  appreciation: [
+    "thank you",
+    "grateful",
+    "heart",
+    "love",
+    "appreciation",
+    "hug",
+    "warm fuzzy",
+    "gratitude",
+  ],
+  success: [
+    "success",
+    "victory",
+    "winner",
+    "achievement",
+    "goal",
+    "you did it",
+    "nailed it",
+    "crushing it",
+  ],
+  motivation: [
+    "you got this",
+    "keep going",
+    "motivation",
+    "inspiration",
+    "believe",
+    "strong",
+    "power",
+    "unstoppable",
+  ],
+  fun: [
+    "awesome",
+    "amazing",
+    "fantastic",
+    "cool",
+    "epic",
+    "legendary",
+    "incredible",
+    "mind blown",
+  ],
+};
+
+// Fallback images in case APIs fail
+const FALLBACK_BOARD_IMAGES = [
+  "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&h=600&fit=crop",
+  "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=800&h=600&fit=crop",
+  "https://images.unsplash.com/photo-1556761175-b413da4baf72?w=800&h=600&fit=crop",
+  "https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=800&h=600&fit=crop",
+  "https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&h=600&fit=crop",
 ];
 
-// Motivational/positive images for cards
-const CARD_IMAGES = [
+const FALLBACK_CARD_IMAGES = [
   "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=400&h=300&fit=crop",
   "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=400&h=300&fit=crop",
   "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=400&h=300&fit=crop",
   "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop",
-  "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=400&h=300&fit=crop",
-  "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400&h=300&fit=crop",
-  "https://images.unsplash.com/photo-1518837695005-2083093ee35b?w=400&h=300&fit=crop",
-  "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop",
 ];
 
+const FALLBACK_GIFS = [
+  "https://media.giphy.com/media/3o7abKhOpu0NwenH3O/giphy.gif",
+  "https://media.giphy.com/media/26u4cqiYI30juCOGY/giphy.gif",
+  "https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif",
+  "https://media.giphy.com/media/3o6Zt6KHxJTbXCnSvu/giphy.gif",
+];
+
+// API Functions
+
 /**
- * Get a random board background image based on category
- * @param {string} category - The board category
- * @returns {string} Random image URL
+ * Fetch random image from Unsplash API
+ * @param {string} query - Search query
+ * @param {number} width - Image width
+ * @param {number} height - Image height
+ * @returns {Promise<string>} Image URL
  */
-export const getRandomBoardImage = (category = "Other") => {
-  const categoryImages =
-    IMAGE_CATEGORIES[category] || IMAGE_CATEGORIES["Other"];
-  const randomIndex = Math.floor(Math.random() * categoryImages.length);
-  return categoryImages[randomIndex];
+const fetchUnsplashImage = async (query, width = 800, height = 600) => {
+  try {
+    // Using Unsplash Source API (no API key required)
+    const searchTerm = encodeURIComponent(query);
+    const url = `https://source.unsplash.com/${width}x${height}/?${searchTerm}`;
+    return url;
+  } catch (error) {
+    console.warn("Unsplash API failed, using fallback:", error);
+    return null;
+  }
 };
 
 /**
- * Get a random image for a kudos card
- * @param {boolean} useGif - Whether to use GIF or static image
- * @returns {string} Random image/GIF URL
+ * Fetch random GIF from Giphy API
+ * @param {string} query - Search query
+ * @returns {Promise<string>} GIF URL
  */
-export const getRandomCardImage = (useGif = false) => {
-  if (useGif) {
-    const randomIndex = Math.floor(Math.random() * KUDOS_GIFS.length);
-    return KUDOS_GIFS[randomIndex];
-  } else {
-    const randomIndex = Math.floor(Math.random() * CARD_IMAGES.length);
-    return CARD_IMAGES[randomIndex];
+const fetchGiphyGif = async (query) => {
+  try {
+    // Using Giphy's public API endpoint (no key required for basic usage)
+    const searchTerm = encodeURIComponent(query);
+    const response = await fetch(
+      `https://api.giphy.com/v1/gifs/search?api_key=demo&q=${searchTerm}&limit=20&rating=g`
+    );
+
+    if (!response.ok) {
+      throw new Error("Giphy API request failed");
+    }
+
+    const data = await response.json();
+
+    if (data.data && data.data.length > 0) {
+      const randomIndex = Math.floor(Math.random() * data.data.length);
+      return data.data[randomIndex].images.fixed_height.url;
+    }
+
+    throw new Error("No GIFs found");
+  } catch (error) {
+    console.warn("Giphy API failed, using fallback:", error);
+    return null;
   }
+};
+
+/**
+ * Get a random board GIF based on category
+ * @param {string} category - The board category
+ * @returns {Promise<string>} Random GIF URL
+ */
+export const getRandomBoardImage = async (category = "Other") => {
+  try {
+    const searchTerms =
+      BOARD_GIF_CATEGORIES[category] || BOARD_GIF_CATEGORIES["Other"];
+    const randomTerm =
+      searchTerms[Math.floor(Math.random() * searchTerms.length)];
+
+    const gifUrl = await fetchGiphyGif(randomTerm);
+
+    if (gifUrl) {
+      return gifUrl;
+    }
+  } catch (error) {
+    console.warn("Failed to fetch board GIF from API:", error);
+  }
+
+  // Fallback to static GIFs
+  const randomIndex = Math.floor(Math.random() * FALLBACK_GIFS.length);
+  return FALLBACK_GIFS[randomIndex];
+};
+
+/**
+ * Get a random GIF for a kudos card
+ * @param {string} cardType - Type of card GIF ('celebration', 'appreciation', 'success', 'motivation', 'fun')
+ * @returns {Promise<string>} Random GIF URL
+ */
+export const getRandomCardImage = async (cardType = "celebration") => {
+  try {
+    const searchTerms =
+      CARD_GIF_CATEGORIES[cardType] || CARD_GIF_CATEGORIES["celebration"];
+    const randomTerm =
+      searchTerms[Math.floor(Math.random() * searchTerms.length)];
+
+    const gifUrl = await fetchGiphyGif(randomTerm);
+
+    if (gifUrl) {
+      return gifUrl;
+    }
+  } catch (error) {
+    console.warn("Failed to fetch card GIF from API:", error);
+  }
+
+  // Fallback to static GIFs
+  const randomIndex = Math.floor(Math.random() * FALLBACK_GIFS.length);
+  return FALLBACK_GIFS[randomIndex];
 };
 
 /**
@@ -141,7 +319,7 @@ export const getRandomGradient = () => {
  * @returns {Array} Array of category names
  */
 export const getBoardCategories = () => {
-  return Object.keys(IMAGE_CATEGORIES);
+  return Object.keys(BOARD_GIF_CATEGORIES);
 };
 
 /**

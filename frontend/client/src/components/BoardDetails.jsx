@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { getRandomCardImage, getPicsumImage } from "../utils/randomImages";
+import { getRandomCardImage } from "../utils/randomImages";
 
 const BoardDetails = () => {
   const { boardId } = useParams();
@@ -351,42 +351,73 @@ const BoardDetails = () => {
                   <div className="random-image-buttons">
                     <button
                       type="button"
-                      onClick={() =>
+                      onClick={async () => {
+                        const gifUrl = await getRandomCardImage("celebration");
                         setNewCard({
                           ...newCard,
-                          image: getRandomCardImage(false),
-                        })
-                      }
+                          image: gifUrl,
+                        });
+                      }}
                       className="random-button"
-                      title="Get random motivational image"
+                      title="Get celebration GIF"
                     >
-                      🎨 Random Image
+                      🎉 Celebration
                     </button>
                     <button
                       type="button"
-                      onClick={() =>
+                      onClick={async () => {
+                        const gifUrl = await getRandomCardImage("appreciation");
                         setNewCard({
                           ...newCard,
-                          image: getRandomCardImage(true),
-                        })
-                      }
+                          image: gifUrl,
+                        });
+                      }}
                       className="random-button"
-                      title="Get random celebration GIF"
+                      title="Get appreciation GIF"
                     >
-                      🎉 Random GIF
+                      💖 Appreciation
                     </button>
                     <button
                       type="button"
-                      onClick={() =>
+                      onClick={async () => {
+                        const gifUrl = await getRandomCardImage("success");
                         setNewCard({
                           ...newCard,
-                          image: getPicsumImage(400, 300),
-                        })
-                      }
+                          image: gifUrl,
+                        });
+                      }}
                       className="random-button"
-                      title="Get random photo from Picsum"
+                      title="Get success GIF"
                     >
-                      📷 Random Photo
+                      🏆 Success
+                    </button>
+                    <button
+                      type="button"
+                      onClick={async () => {
+                        const gifUrl = await getRandomCardImage("motivation");
+                        setNewCard({
+                          ...newCard,
+                          image: gifUrl,
+                        });
+                      }}
+                      className="random-button"
+                      title="Get motivation GIF"
+                    >
+                      💪 Motivation
+                    </button>
+                    <button
+                      type="button"
+                      onClick={async () => {
+                        const gifUrl = await getRandomCardImage("fun");
+                        setNewCard({
+                          ...newCard,
+                          image: gifUrl,
+                        });
+                      }}
+                      className="random-button"
+                      title="Get fun GIF"
+                    >
+                      🤩 Fun
                     </button>
                   </div>
                 </div>

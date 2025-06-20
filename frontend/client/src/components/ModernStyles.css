@@ -852,6 +852,88 @@
   color: rgba(255, 255, 255, 0.9);
 }
 
+/* Board Image Styles - Images appear at top of cards */
+.board-image {
+  margin: -1.5rem -1.5rem 1rem -1.5rem; /* Negative margins to extend to card edges */
+  border-radius: 0.75rem 0.75rem 0 0; /* Only round top corners */
+  overflow: hidden;
+  height: 160px; /* Fixed height for consistency */
+  background: #f8f9fa;
+  position: relative;
+}
+
+.board-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.2s ease-in-out;
+}
+
+.board-image img:hover {
+  transform: scale(1.05);
+}
+
+/* Handle gradient backgrounds in board images */
+.board-image[style*="linear-gradient"] {
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Adjust board header when image is present */
+.board-card:has(.board-image) .board-header {
+  margin-top: 0; /* Remove top margin when image is present */
+}
+
+/* Ensure proper spacing for board content */
+.board-card .board-info {
+  margin-top: 1rem;
+}
+
+/* Handle very long images gracefully */
+.board-image img[src*="unsplash.com"] {
+  object-position: center;
+}
+
+.board-image img[src*="picsum.photos"] {
+  object-position: center;
+}
+
+/* Loading state for images - REMOVED to eliminate loading text on GIFs */
+/*
+.board-image::before {
+  content: "🖼️ Loading image...";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #666;
+  font-size: 0.9rem;
+  z-index: 1;
+}
+
+.board-image img:not([src=""]) + ::before {
+  display: none;
+}
+*/
+
+/* Error handling for broken images */
+.board-image img:not([src]),
+.board-image img[src=""] {
+  display: none;
+}
+
+.board-image:has(img:not([src])),
+.board-image:has(img[src=""]) {
+  display: none;
+}
+
 /* Loading state for images */
 .card-img[src=""] {
   display: none;

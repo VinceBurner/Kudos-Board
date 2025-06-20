@@ -322,6 +322,21 @@ const BoardCard = ({
     <div className="board-card">
       {!showEditForm ? (
         <>
+          {board.image && (
+            <div className="board-image">
+              {board.image.startsWith("linear-gradient") ? (
+                <div
+                  style={{ background: board.image }}
+                  className="board-image"
+                >
+                  <span>🎨 Gradient Background</span>
+                </div>
+              ) : (
+                <img src={board.image} alt={board.title} />
+              )}
+            </div>
+          )}
+
           <div className="board-header">
             <h3 className="board-title">{board.title}</h3>
             <div className="board-actions">
@@ -393,12 +408,6 @@ const BoardCard = ({
               </div>
             )}
           </div>
-
-          {board.image && (
-            <div className="board-image">
-              <img src={board.image} alt={board.title} />
-            </div>
-          )}
 
           <div className="board-footer">
             <div className="board-footer-actions">

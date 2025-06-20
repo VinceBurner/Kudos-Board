@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import {
   getRandomBoardImage,
   getRandomGradient,
-  getPicsumImage,
 } from "../utils/randomImages";
 
 const CreateBoardForm = ({ onCreateNew, onCancel }) => {
@@ -118,16 +117,17 @@ const CreateBoardForm = ({ onCreateNew, onCancel }) => {
             <div className="random-image-buttons">
               <button
                 type="button"
-                onClick={() =>
+                onClick={async () => {
+                  const gifUrl = await getRandomBoardImage(formData.category);
                   setFormData({
                     ...formData,
-                    image: getRandomBoardImage(formData.category),
-                  })
-                }
+                    image: gifUrl,
+                  });
+                }}
                 className="random-button"
-                title="Get random image based on category"
+                title="Get random GIF based on category"
               >
-                🎲 Random Image
+                🎉 Random GIF
               </button>
               <button
                 type="button"
@@ -138,16 +138,6 @@ const CreateBoardForm = ({ onCreateNew, onCancel }) => {
                 title="Get random gradient background"
               >
                 🌈 Random Gradient
-              </button>
-              <button
-                type="button"
-                onClick={() =>
-                  setFormData({ ...formData, image: getPicsumImage() })
-                }
-                className="random-button"
-                title="Get random photo from Picsum"
-              >
-                📸 Random Photo
               </button>
             </div>
           </div>
