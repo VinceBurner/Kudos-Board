@@ -186,7 +186,13 @@ app.get("/api/boards/:id", async (req, res) => {
     const board = await prisma.board.findUnique({
       where: { id: boardId },
       include: {
-        kudos: true,
+        kudos: {
+          orderBy: [
+            { pinned: "desc" }, // Pinned cards first
+            { pinnedAt: "desc" }, // Then by most recently pinned first
+            { createdAt: "desc" }, // Then by newest first for unpinned cards
+          ],
+        },
       },
     });
 
@@ -515,6 +521,74 @@ app.post("/api/boards/:boardId/cards/:cardId/upvote", async (req, res) => {
     }
     console.error("Error upvoting card:", error);
     res.status(500).json({ error: "Failed to upvote card" });
+  }
+});
+
+// POST pin a card
+app.post("/api/cards/:cardId/pin", async (req, res) => {
+  const cardId = parseInt(req.params.cardId);
+
+  if (isNaN(cardId)) {
+    return res.status(400).json({ error: "Invalid card ID" });
+  }
+
+  try {
+    const updatedCard = await prisma.kudo.update({
+      where: { id: cardId },
+      data: {
+        pinned: true,
+        pinnedAt: new Date(),
+      },
+      include: {
+        board: true,
+      },
+    });
+
+    res.json({
+      success: true,
+      message: "Card pinned successfully",
+      card: updatedCard,
+    });
+  } catch (error) {
+    if (error.code === "P2025") {
+      return res.status(404).json({ error: "Card not found" });
+    }
+    console.error("Error pinning card:", error);
+    res.status(500).json({ error: "Failed to pin card" });
+  }
+});
+
+// POST unpin a card
+app.post("/api/cards/:cardId/unpin", async (req, res) => {
+  const cardId = parseInt(req.params.cardId);
+
+  if (isNaN(cardId)) {
+    return res.status(400).json({ error: "Invalid card ID" });
+  }
+
+  try {
+    const updatedCard = await prisma.kudo.update({
+      where: { id: cardId },
+      data: {
+        pinned: false,
+        pinnedAt: null,
+      },
+      include: {
+        board: true,
+      },
+    });
+
+    res.json({
+      success: true,
+      message: "Card unpinned successfully",
+      card: updatedCard,
+    });
+  } catch (error) {
+    if (error.code === "P2025") {
+      return res.status(404).json({ error: "Card not found" });
+    }
+    console.error("Error unpinning card:", error);
+    res.status(500).json({ error: "Failed to unpin card" });
   }
 });
 
