@@ -137,24 +137,6 @@ const BoardList = () => {
     setBoards((prevBoards) => [...prevBoards, newBoard]);
   };
 
-  const handleEditBoard = (updatedBoard) => {
-    // Update the board in the local state
-    setBoards((prevBoards) =>
-      prevBoards.map((board) =>
-        board.id === updatedBoard.id ? updatedBoard : board
-      )
-    );
-  };
-
-  const handleUpvoteBoard = (updatedBoard) => {
-    // Update the board in the local state after upvote
-    setBoards((prevBoards) =>
-      prevBoards.map((board) =>
-        board.id === updatedBoard.id ? updatedBoard : board
-      )
-    );
-  };
-
   const handleSearch = () => {
     if (!searchTerm.trim()) {
       setFilteredBoards(boards);
@@ -473,8 +455,6 @@ const BoardList = () => {
             board={board}
             onDelete={handleDeleteBoard}
             onCreateNew={handleCreateNew}
-            onEdit={handleEditBoard}
-            onUpvote={handleUpvoteBoard}
           />
         ))}
       </div>

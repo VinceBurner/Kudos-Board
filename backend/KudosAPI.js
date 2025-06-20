@@ -32,10 +32,10 @@ app.get("/api/boards", async (_req, res) => {
 app.post("/api/boards", async (req, res) => {
   const { title, description, category, author, image } = req.body;
 
-  if (!title || !category || !author) {
+  if (!title || !category || !description || !image) {
     return res
       .status(400)
-      .json({ error: "Title, category, and author are required" });
+      .json({ error: "Title, category, description, and image are required" });
   }
 
   if (typeof title !== "string" || title.trim().length === 0) {
@@ -48,26 +48,28 @@ app.post("/api/boards", async (req, res) => {
       .json({ error: "Category must be a non-empty string" });
   }
 
-  if (typeof author !== "string" || author.trim().length === 0) {
-    return res.status(400).json({ error: "Author must be a non-empty string" });
+  if (typeof description !== "string" || description.trim().length === 0) {
+    return res
+      .status(400)
+      .json({ error: "Description must be a non-empty string" });
   }
 
-  if (description && typeof description !== "string") {
-    return res.status(400).json({ error: "Description must be a string" });
+  if (typeof image !== "string" || image.trim().length === 0) {
+    return res.status(400).json({ error: "Image must be a non-empty string" });
   }
 
-  if (image && typeof image !== "string") {
-    return res.status(400).json({ error: "Image must be a string" });
+  if (author && typeof author !== "string") {
+    return res.status(400).json({ error: "Author must be a string" });
   }
 
   try {
     const newBoard = await prisma.board.create({
       data: {
         title: title.trim(),
-        description: description ? description.trim() : "",
+        description: description.trim(),
         category: category.trim(),
-        author: author.trim(),
-        image: image ? image.trim() : "",
+        author: author ? author.trim() : "",
+        image: image.trim(),
         upvotes: 0,
       },
       include: {
@@ -91,10 +93,10 @@ app.put("/api/boards/:id", async (req, res) => {
     return res.status(400).json({ error: "Invalid board ID" });
   }
 
-  if (!title || !category || !author) {
+  if (!title || !category || !description || !image) {
     return res
       .status(400)
-      .json({ error: "Title, category, and author are required" });
+      .json({ error: "Title, category, description, and image are required" });
   }
 
   if (typeof title !== "string" || title.trim().length === 0) {
@@ -107,16 +109,18 @@ app.put("/api/boards/:id", async (req, res) => {
       .json({ error: "Category must be a non-empty string" });
   }
 
-  if (typeof author !== "string" || author.trim().length === 0) {
-    return res.status(400).json({ error: "Author must be a non-empty string" });
+  if (typeof description !== "string" || description.trim().length === 0) {
+    return res
+      .status(400)
+      .json({ error: "Description must be a non-empty string" });
   }
 
-  if (description !== undefined && typeof description !== "string") {
-    return res.status(400).json({ error: "Description must be a string" });
+  if (typeof image !== "string" || image.trim().length === 0) {
+    return res.status(400).json({ error: "Image must be a non-empty string" });
   }
 
-  if (image !== undefined && typeof image !== "string") {
-    return res.status(400).json({ error: "Image must be a string" });
+  if (author && typeof author !== "string") {
+    return res.status(400).json({ error: "Author must be a string" });
   }
 
   try {
@@ -124,10 +128,10 @@ app.put("/api/boards/:id", async (req, res) => {
       where: { id: boardId },
       data: {
         title: title.trim(),
-        description: description !== undefined ? description.trim() : undefined,
+        description: description.trim(),
         category: category.trim(),
-        author: author.trim(),
-        image: image !== undefined ? image.trim() : undefined,
+        author: author ? author.trim() : "",
+        image: image.trim(),
       },
       include: {
         kudos: true,
@@ -294,7 +298,7 @@ app.get("/api/cards/:id", async (req, res) => {
 // POST create a new card for a board
 app.post("/api/boards/:boardId/cards", async (req, res) => {
   const boardId = parseInt(req.params.boardId);
-  const { message, author } = req.body;
+  const { message, author, image } = req.body;
 
   if (isNaN(boardId)) {
     return res.status(400).json({ error: "Invalid board ID" });
@@ -314,6 +318,10 @@ app.post("/api/boards/:boardId/cards", async (req, res) => {
     return res.status(400).json({ error: "Author must be a non-empty string" });
   }
 
+  if (image && typeof image !== "string") {
+    return res.status(400).json({ error: "Image must be a string" });
+  }
+
   try {
     // First check if the board exists
     const board = await prisma.board.findUnique({
@@ -329,6 +337,7 @@ app.post("/api/boards/:boardId/cards", async (req, res) => {
       data: {
         message: message.trim(),
         author: author.trim(),
+        image: image ? image.trim() : null,
         boardId: boardId,
         upvotes: 0,
       },
@@ -347,7 +356,7 @@ app.post("/api/boards/:boardId/cards", async (req, res) => {
 // PUT update a card by ID
 app.put("/api/cards/:id", async (req, res) => {
   const cardId = parseInt(req.params.id);
-  const { message, author } = req.body;
+  const { message, author, image } = req.body;
 
   if (isNaN(cardId)) {
     return res.status(400).json({ error: "Invalid card ID" });
@@ -367,12 +376,17 @@ app.put("/api/cards/:id", async (req, res) => {
     return res.status(400).json({ error: "Author must be a non-empty string" });
   }
 
+  if (image !== undefined && typeof image !== "string") {
+    return res.status(400).json({ error: "Image must be a string" });
+  }
+
   try {
     const updatedCard = await prisma.kudo.update({
       where: { id: cardId },
       data: {
         message: message.trim(),
         author: author.trim(),
+        image: image !== undefined ? (image ? image.trim() : null) : undefined,
       },
       include: {
         board: true,

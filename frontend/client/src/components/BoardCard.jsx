@@ -1,18 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const BoardCard = ({
-  board,
-  onDelete,
-  onCreateNew,
-  onEdit,
-  onUpvote,
-  isCreateCard = false,
-}) => {
+const BoardCard = ({ board, onDelete, onCreateNew, isCreateCard = false }) => {
   const navigate = useNavigate();
-  const [isUpvoting, setIsUpvoting] = useState(false);
   const [showCreateForm, setShowCreateForm] = useState(false);
-  const [showEditForm, setShowEditForm] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -20,52 +11,11 @@ const BoardCard = ({
     author: "",
     image: "",
   });
-  const [editFormData, setEditFormData] = useState({
-    title: "",
-    description: "",
-    category: "",
-    author: "",
-    image: "",
-  });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
   const [error, setError] = useState("");
-  const [editError, setEditError] = useState("");
 
   const handleDelete = () => {
     onDelete(board.id);
-  };
-
-  const handleUpvote = async () => {
-    if (isUpvoting) return;
-
-    try {
-      setIsUpvoting(true);
-      const response = await fetch(
-        `http://localhost:5000/api/boards/${board.id}/upvote`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("Failed to upvote board");
-      }
-
-      const result = await response.json();
-
-      // Notify parent component about the updated board
-      if (onUpvote) {
-        onUpvote(result.board);
-      }
-    } catch (err) {
-      console.error("Error upvoting board:", err);
-    } finally {
-      setIsUpvoting(false);
-    }
   };
 
   const handleCreateNew = () => {
@@ -131,92 +81,6 @@ const BoardCard = ({
       image: "",
     });
     setError("");
-  };
-
-  const handleEdit = () => {
-    setEditFormData({
-      title: board.title,
-      description: board.description || "",
-      category: board.category,
-      author: board.author,
-      image: board.image || "",
-    });
-    setShowEditForm(true);
-  };
-
-  const handleEditFormChange = (e) => {
-    setEditFormData({
-      ...editFormData,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  const handleEditSubmit = async (e) => {
-    e.preventDefault();
-    setIsEditing(true);
-    setEditError("");
-
-    try {
-      const response = await fetch(
-        `http://localhost:5000/api/boards/${board.id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(editFormData),
-        }
-      );
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Failed to update board");
-      }
-
-      const updatedBoard = await response.json();
-
-      // Close edit form
-      setShowEditForm(false);
-      setEditFormData({
-        title: "",
-        description: "",
-        category: "",
-        author: "",
-        image: "",
-      });
-
-      // Notify parent component
-      if (onEdit) {
-        onEdit(updatedBoard);
-      }
-    } catch (err) {
-      setEditError(err.message);
-    } finally {
-      setIsEditing(false);
-    }
-  };
-
-  const handleCancelEdit = () => {
-    setShowEditForm(false);
-    setEditFormData({
-      title: "",
-      description: "",
-      category: "",
-      author: "",
-      image: "",
-    });
-    setEditError("");
-  };
-
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
   };
 
   // Create new board card
@@ -318,204 +182,46 @@ const BoardCard = ({
     );
   }
 
-  // Regular board card
+  // Simplified board card - image, title, view button, and delete button
   return (
-    <div className="board-card">
-      {!showEditForm ? (
-        <>
-          {board.image && (
-            <div className="board-image">
-              {board.image.startsWith("linear-gradient") ? (
-                <div
-                  style={{ background: board.image }}
-                  className="board-image"
-                >
-                  <span>🎨 Gradient Background</span>
-                </div>
-              ) : (
-                <img src={board.image} alt={board.title} />
-              )}
+    <div className="board-card simple-board-card">
+      {board.image && (
+        <div className="board-image">
+          {board.image.startsWith("linear-gradient") ? (
+            <div
+              style={{ background: board.image }}
+              className="board-image gradient-background"
+            >
+              <span>🎨 Gradient Background</span>
             </div>
+          ) : (
+            <img src={board.image} alt={board.title} />
           )}
-
-          <div className="board-header">
-            <h3 className="board-title">{board.title}</h3>
-            <div className="board-actions">
-              <button
-                className="create-button-small modern-button success"
-                onClick={handleCreateNew}
-                title="Create new board"
-              >
-                <span className="button-icon">✨</span>
-              </button>
-              <button
-                className="edit-button modern-button secondary"
-                onClick={handleEdit}
-                title="Edit board"
-              >
-                <span className="button-icon">✏️</span>
-              </button>
-              <button
-                className="delete-button modern-button danger"
-                onClick={handleDelete}
-                title="Delete board"
-              >
-                <span className="button-icon">🗑️</span>
-              </button>
-            </div>
-          </div>
-
-          <div className="board-info">
-            <div className="board-category">
-              <span className="category-label">Category:</span>
-              <span className="category-value">{board.category}</span>
-            </div>
-
-            <div className="board-author">
-              <span className="author-label">Created by:</span>
-              <span className="author-value">{board.author}</span>
-            </div>
-
-            <div className="board-date">
-              <span className="date-label">Created:</span>
-              <span className="date-value">{formatDate(board.createdAt)}</span>
-            </div>
-
-            {board.updatedAt && (
-              <div className="board-updated">
-                <span className="updated-label">Updated:</span>
-                <span className="updated-value">
-                  {formatDate(board.updatedAt)}
-                </span>
-              </div>
-            )}
-
-            <div className="board-kudos-count">
-              <span className="kudos-label">Kudos:</span>
-              <span className="kudos-value">
-                {board.kudos ? board.kudos.length : 0}
-              </span>
-            </div>
-
-            <div className="board-upvotes">
-              <span className="upvotes-label">Upvotes:</span>
-              <span className="upvotes-value">{board.upvotes || 0}</span>
-            </div>
-
-            {board.description && (
-              <div className="board-description">
-                <span className="description-label">Description:</span>
-                <p className="description-value">{board.description}</p>
-              </div>
-            )}
-          </div>
-
-          <div className="board-footer">
-            <div className="board-footer-actions">
-              <button
-                onClick={handleUpvote}
-                className={`upvote-board-button modern-button ${
-                  isUpvoting ? "upvoting" : "upvote"
-                }`}
-                disabled={isUpvoting}
-                title="Upvote this board"
-              >
-                <span className="upvote-icon">{isUpvoting ? "⏳" : "👍"}</span>
-                <span className="upvote-count">{board.upvotes || 0}</span>
-              </button>
-
-              <button
-                className="view-details-button modern-button primary"
-                onClick={() => navigate(`/boards/${board.id}`)}
-              >
-                <span className="button-icon">👁️</span>
-                View Details
-              </button>
-            </div>
-          </div>
-        </>
-      ) : (
-        <div className="edit-form">
-          <h3>Edit Board</h3>
-          <form onSubmit={handleEditSubmit}>
-            <div className="form-group">
-              <input
-                type="text"
-                name="title"
-                value={editFormData.title}
-                onChange={handleEditFormChange}
-                placeholder="Board title"
-                required
-              />
-            </div>
-
-            <div className="form-group">
-              <textarea
-                name="description"
-                value={editFormData.description}
-                onChange={handleEditFormChange}
-                placeholder="Board description (required)"
-                rows="3"
-                required
-              />
-            </div>
-
-            <div className="form-group">
-              <select
-                name="category"
-                value={editFormData.category}
-                onChange={handleEditFormChange}
-                required
-              >
-                <option value="">Select category</option>
-                <option value="celebration">Celebration</option>
-                <option value="thank you">Thank You</option>
-                <option value="inspiration">Inspiration</option>
-              </select>
-            </div>
-
-            <div className="form-group">
-              <input
-                type="text"
-                name="author"
-                value={editFormData.author}
-                onChange={handleEditFormChange}
-                placeholder="Author name (optional)"
-              />
-            </div>
-
-            <div className="form-group">
-              <input
-                type="url"
-                name="image"
-                value={editFormData.image}
-                onChange={handleEditFormChange}
-                placeholder="Board GIF/image URL (required)"
-                required
-              />
-            </div>
-
-            {editError && <div className="error-message">{editError}</div>}
-
-            <div className="form-buttons">
-              <button
-                type="submit"
-                disabled={isEditing}
-                className="submit-button"
-              >
-                {isEditing ? "Updating..." : "Update"}
-              </button>
-              <button
-                type="button"
-                onClick={handleCancelEdit}
-                className="cancel-button"
-              >
-                Cancel
-              </button>
-            </div>
-          </form>
         </div>
       )}
+
+      <div className="board-header">
+        <h3 className="board-title">{board.title}</h3>
+      </div>
+
+      <div className="board-actions-simple">
+        <button
+          className="view-details-button modern-button primary"
+          onClick={() => navigate(`/boards/${board.id}`)}
+        >
+          <span className="button-icon">👁️</span>
+          View Board
+        </button>
+
+        <button
+          className="delete-button modern-button danger"
+          onClick={handleDelete}
+          title="Delete board"
+        >
+          <span className="button-icon">🗑️</span>
+          Delete
+        </button>
+      </div>
     </div>
   );
 };
