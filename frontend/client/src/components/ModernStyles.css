@@ -1,4 +1,4 @@
-/* Modern Button Styles */
+
 .modern-button {
   display: inline-flex;
   align-items: center;
@@ -37,59 +37,59 @@
 
 /* Button Variants */
 .modern-button.primary {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
   color: white;
 }
 
 .modern-button.primary:hover {
-  background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+  background: linear-gradient(135deg, #5b6470 0%, #3b4553 100%);
 }
 
 .modern-button.secondary {
-  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  background: linear-gradient(135deg, #9ca3af 0%, #6b7280 100%);
   color: white;
 }
 
 .modern-button.secondary:hover {
-  background: linear-gradient(135deg, #ee82f0 0%, #f34560 100%);
+  background: linear-gradient(135deg, #8c939f 0%, #5b6270 100%);
 }
 
 .modern-button.success {
-  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
   color: white;
 }
 
 .modern-button.success:hover {
-  background: linear-gradient(135deg, #3d9bfe 0%, #00e0fe 100%);
+  background: linear-gradient(135deg, #0ea971 0%, #047559 100%);
 }
 
 .modern-button.danger {
-  background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
   color: white;
 }
 
 .modern-button.danger:hover {
-  background: linear-gradient(135deg, #f95d88 0%, #fed12e 100%);
+  background: linear-gradient(135deg, #dc3434 0%, #cc2626 100%);
 }
 
 .modern-button.upvote {
-  background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
-  color: #333;
+  background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%);
+  color: #374151;
   padding: 0.5rem 1rem;
   min-height: 2rem;
 }
 
 .modern-button.upvote:hover {
-  background: linear-gradient(135deg, #96e6e2 0%, #fcc4d1 100%);
+  background: linear-gradient(135deg, #d1d5db 0%, #c1c5cb 100%);
 }
 
 .modern-button.upvoting {
-  background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
-  color: #333;
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+  color: #1f2937;
   animation: pulse 1s infinite;
 }
 
-/* Button Icons */
+
 .button-icon {
   font-size: 1rem;
   line-height: 1;
@@ -104,7 +104,7 @@
   margin-left: 0.25rem;
 }
 
-/* Filter Buttons */
+
 .filter-button {
   padding: 0.5rem 1rem;
   margin: 0.25rem;
@@ -124,13 +124,13 @@
   font-weight: 500;
 }
 
-/* Modern Form Styles */
+
 .modern-form {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--bg-form);
   border-radius: 1rem;
   padding: 2rem;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  color: white;
+  box-shadow: var(--shadow-lg);
+  color: var(--text-inverse);
   margin: 1rem 0;
 }
 
@@ -239,6 +239,17 @@
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
 }
 
+/* Visual indicator for pinned cards */
+.kudos-card.pinned {
+  border-left: 4px solid #ffc107;
+  box-shadow: 0 4px 16px rgba(255, 193, 7, 0.2);
+  background: linear-gradient(135deg, #fff9e6 0%, #ffffff 100%);
+}
+
+.kudos-card.pinned:hover {
+  box-shadow: 0 8px 24px rgba(255, 193, 7, 0.3);
+}
+
 .card-content {
   margin-bottom: 1rem;
 }
@@ -254,9 +265,63 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  gap: 8px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.card-pin {
+  display: flex;
+  align-items: center;
+}
+
+.pin-button {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  border: 1px solid;
+}
+
+.pin-button.unpinned {
+  background: #f8f9fa;
+  color: #6c757d;
+  border-color: #dee2e6;
+}
+
+.pin-button.unpinned:hover {
+  background: #e9ecef;
+  color: #495057;
+  border-color: #adb5bd;
+}
+
+.pin-button.pinned {
+  background: #fff3cd;
+  color: #856404;
+  border-color: #ffeaa7;
+}
+
+.pin-button.pinned:hover {
+  background: #ffeaa7;
+  border-color: #ffdf7e;
+}
+
+.pin-button.pinning {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.pin-button:disabled {
+  cursor: not-allowed;
+}
+
+.pin-icon {
+  font-size: 1rem;
 }
 
 .card-footer {
@@ -385,19 +450,19 @@
 }
 
 .board-actions-simple .view-details-button {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
 }
 
 .board-actions-simple .view-details-button:hover {
-  background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+  background: linear-gradient(135deg, #5b6470 0%, #3b4553 100%);
 }
 
 .board-actions-simple .delete-button {
-  background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
 }
 
 .board-actions-simple .delete-button:hover {
-  background: linear-gradient(135deg, #f95d88 0%, #fed12e 100%);
+  background: linear-gradient(135deg, #dc3434 0%, #cc2626 100%);
 }
 
 /* Handle GIFs specifically in simplified cards */
@@ -532,7 +597,7 @@
   margin: 0 0 1rem 0;
   font-size: 1.1rem;
   font-weight: 600;
-  color: #333;
+  color: var(--text-title);
 }
 
 .filter-buttons {
@@ -560,7 +625,7 @@
   margin: 0;
   font-size: 1.5rem;
   font-weight: 700;
-  color: #333;
+  color: var(--text-title);
 }
 
 /* Animations */
@@ -1062,4 +1127,397 @@
     grid-template-columns: 1fr;
     padding: 1rem;
   }
+}
+
+/* ===== THEME SYSTEM ===== */
+
+/* CSS Variables for Light Theme (Default) */
+:root {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8f9fa;
+  --bg-tertiary: #e9ecef;
+  --bg-card: #ffffff;
+  --bg-form: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+  --bg-pinned: linear-gradient(135deg, #fff9e6 0%, #ffffff 100%);
+
+  --text-primary: #1f2937;
+  --text-secondary: #6b7280;
+  --text-tertiary: #9ca3af;
+  --text-inverse: #ffffff;
+  --text-muted: rgba(0, 0, 0, 0.6);
+  --text-title: #111827;
+
+  --border-primary: rgba(0, 0, 0, 0.1);
+  --border-secondary: rgba(0, 0, 0, 0.05);
+  --border-input: #e2e8f0;
+  --border-pinned: #f59e0b;
+
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.15);
+  --shadow-pinned: 0 4px 16px rgba(245, 158, 11, 0.2);
+
+  --overlay-light: rgba(255, 255, 255, 0.1);
+  --overlay-medium: rgba(255, 255, 255, 0.2);
+  --overlay-backdrop: rgba(255, 255, 255, 0.95);
+}
+
+/* Dark Theme Variables */
+[data-theme="dark"] {
+  --bg-primary: #111827;
+  --bg-secondary: #1f2937;
+  --bg-tertiary: #374151;
+  --bg-card: #1f2937;
+  --bg-form: linear-gradient(135deg, #374151 0%, #4b5563 100%);
+  --bg-pinned: linear-gradient(135deg, #1f2937 0%, #374151 100%);
+
+  --text-primary: #f9fafb;
+  --text-secondary: #d1d5db;
+  --text-tertiary: #9ca3af;
+  --text-inverse: #111827;
+  --text-muted: rgba(255, 255, 255, 0.7);
+  --text-title: #ffffff;
+
+  --border-primary: rgba(255, 255, 255, 0.1);
+  --border-secondary: rgba(255, 255, 255, 0.05);
+  --border-input: #4b5563;
+  --border-pinned: #f59e0b;
+
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.4);
+  --shadow-pinned: 0 4px 16px rgba(245, 158, 11, 0.3);
+
+  --overlay-light: rgba(0, 0, 0, 0.1);
+  --overlay-medium: rgba(0, 0, 0, 0.2);
+  --overlay-backdrop: rgba(17, 24, 39, 0.95);
+}
+
+/* Apply theme to body */
+.theme-light {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.theme-dark {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Theme Toggle Button Styles */
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid var(--border-primary);
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+.theme-toggle:hover {
+  background: var(--bg-tertiary);
+  border-color: var(--border-input);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.theme-toggle-icon {
+  font-size: 1rem;
+}
+
+.theme-toggle-text {
+  font-weight: 600;
+}
+
+/* Header Theme Integration */
+.header {
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border-primary);
+  box-shadow: var(--shadow-sm);
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.header-text {
+  flex: 1;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.app-title {
+  color: var(--text-primary);
+}
+
+.app-subtitle {
+  color: var(--text-secondary);
+}
+
+/* Update existing components to use theme variables */
+
+/* Card Styles with Theme */
+.kudos-card {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid var(--border-secondary);
+  box-shadow: var(--shadow-md);
+}
+
+.kudos-card:hover {
+  box-shadow: var(--shadow-lg);
+}
+
+.kudos-card.pinned {
+  border-left: 4px solid var(--border-pinned);
+  box-shadow: var(--shadow-pinned);
+  background: var(--bg-pinned);
+}
+
+.card-message {
+  color: var(--text-primary);
+}
+
+.card-author {
+  color: var(--text-primary);
+}
+
+.card-date {
+  color: var(--text-tertiary);
+}
+
+.card-actions {
+  border-top: 1px solid var(--border-primary);
+}
+
+/* Board Card Styles with Theme */
+.board-card {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid var(--border-secondary);
+  box-shadow: var(--shadow-md);
+}
+
+.board-card:hover {
+  box-shadow: var(--shadow-lg);
+}
+
+.board-title {
+  color: var(--text-title);
+  font-weight: 700;
+}
+
+/* Form Styles with Theme */
+.modern-form {
+  background: var(--bg-form);
+  box-shadow: var(--shadow-lg);
+}
+
+.modern-input,
+.modern-textarea {
+  background: var(--overlay-light);
+  border-color: var(--overlay-medium);
+  color: var(--text-inverse);
+  backdrop-filter: blur(10px);
+}
+
+.modern-input::placeholder,
+.modern-textarea::placeholder {
+  color: var(--text-muted);
+}
+
+.modern-input:focus,
+.modern-textarea:focus {
+  border-color: var(--overlay-medium);
+  background: var(--overlay-medium);
+  box-shadow: 0 0 0 3px var(--overlay-light);
+}
+
+/* Board Meta and Description with Theme */
+.board-meta {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-secondary);
+}
+
+.board-description {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-secondary);
+}
+
+.meta-label {
+  color: var(--text-secondary);
+}
+
+.meta-value {
+  color: var(--text-primary);
+}
+
+.board-description h3 {
+  color: var(--text-primary);
+}
+
+.board-description p {
+  color: var(--text-secondary);
+}
+
+/* Search and Filter Styles with Theme */
+.search-input {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border-color: var(--border-input);
+}
+
+.search-input:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* Error and Loading States with Theme */
+.error-message {
+  background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+  color: white;
+}
+
+.loading {
+  color: var(--text-secondary);
+}
+
+.no-cards-message {
+  color: var(--text-secondary);
+}
+
+.no-boards-message {
+  color: var(--text-secondary);
+}
+
+/* Board Details with Wallpaper Theme Integration */
+.board-details {
+  background-color: var(--bg-secondary);
+}
+
+.board-details-with-wallpaper .board-details-content {
+  background: var(--overlay-backdrop);
+  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow-lg);
+}
+
+.board-details-with-wallpaper .back-button {
+  background: rgba(102, 126, 234, 0.9);
+  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow-md);
+}
+
+.board-details-with-wallpaper .modern-form {
+  background: rgba(102, 126, 234, 0.95);
+  backdrop-filter: blur(15px);
+  box-shadow: var(--shadow-lg);
+}
+
+.board-details-with-wallpaper .kudos-card {
+  background: var(--overlay-backdrop);
+  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow-lg);
+}
+
+.board-details-with-wallpaper .board-meta {
+  background: var(--overlay-backdrop);
+  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow-md);
+}
+
+.board-details-with-wallpaper .board-description {
+  background: var(--overlay-backdrop);
+  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow-md);
+}
+
+/* Pin Button Theme Integration */
+.pin-button.unpinned {
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  border-color: var(--border-primary);
+}
+
+.pin-button.unpinned:hover {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  border-color: var(--border-input);
+}
+
+.pin-button.pinned {
+  background: #fff3cd;
+  color: #856404;
+  border-color: #ffeaa7;
+}
+
+[data-theme="dark"] .pin-button.pinned {
+  background: #3a2f1a;
+  color: #f6ad55;
+  border-color: #d69e2e;
+}
+
+.pin-button.pinned:hover {
+  background: #ffeaa7;
+  border-color: #ffdf7e;
+}
+
+[data-theme="dark"] .pin-button.pinned:hover {
+  background: #4a3a20;
+  border-color: #ed8936;
+}
+
+/* Responsive Theme Adjustments */
+@media (max-width: 768px) {
+  .header-content {
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: center;
+  }
+
+  .header-actions {
+    justify-content: center;
+  }
+
+  .theme-toggle {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+  }
+}
+
+/* Smooth transitions for theme switching */
+* {
+  transition: background-color 0.3s ease, color 0.3s ease,
+    border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Ensure images and GIFs work well in both themes */
+.card-img,
+.board-image img {
+  border-radius: 0.5rem;
+}
+
+[data-theme="dark"] .card-img,
+[data-theme="dark"] .board-image img {
+  opacity: 0.9;
+}
+
+[data-theme="dark"] .card-img:hover,
+[data-theme="dark"] .board-image img:hover {
+  opacity: 1;
 }

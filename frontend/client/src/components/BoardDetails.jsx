@@ -15,6 +15,7 @@ const BoardDetails = () => {
     image: "",
   });
   const [upvotingCards, setUpvotingCards] = useState(new Set());
+  const [pinningCards, setPinningCards] = useState(new Set());
 
   const fetchBoard = useCallback(
     async (showLoading = true) => {
@@ -124,6 +125,50 @@ const BoardDetails = () => {
       setError(err.message);
     } finally {
       setUpvotingCards((prev) => {
+        const newSet = new Set(prev);
+        newSet.delete(cardId);
+        return newSet;
+      });
+    }
+  };
+
+  const handleTogglePin = async (cardId, currentPinnedStatus) => {
+    if (pinningCards.has(cardId)) {
+      return; // Prevent multiple simultaneous pin operations
+    }
+
+    try {
+      setPinningCards((prev) => new Set(prev).add(cardId));
+
+      const endpoint = currentPinnedStatus ? "unpin" : "pin";
+      const response = await fetch(
+        `http://localhost:5000/api/cards/${cardId}/${endpoint}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || `Failed to ${endpoint} card`);
+      }
+
+      const result = await response.json();
+
+      // Update the specific card in the board state
+      setBoard((prevBoard) => ({
+        ...prevBoard,
+        kudos: prevBoard.kudos.map((card) =>
+          card.id === cardId ? result.card : card
+        ),
+      }));
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setPinningCards((prev) => {
         const newSet = new Set(prev);
         newSet.delete(cardId);
         return newSet;
@@ -406,7 +451,10 @@ const BoardDetails = () => {
               </div>
             ) : (
               board.kudos.map((card) => (
-                <div key={card.id} className="kudos-card">
+                <div
+                  key={card.id}
+                  className={`kudos-card ${card.pinned ? "pinned" : ""}`}
+                >
                   {card.image && (
                     <div className="card-image">
                       <img
@@ -423,6 +471,27 @@ const BoardDetails = () => {
                     <p className="card-message">{card.message}</p>
                   </div>
                   <div className="card-actions">
+                    <div className="card-pin">
+                      <button
+                        onClick={() => handleTogglePin(card.id, card.pinned)}
+                        className={`pin-button modern-button ${
+                          card.pinned ? "pinned" : "unpinned"
+                        } ${pinningCards.has(card.id) ? "pinning" : ""}`}
+                        disabled={pinningCards.has(card.id)}
+                        title={
+                          card.pinned ? "Unpin this card" : "Pin this card"
+                        }
+                      >
+                        <span className="pin-icon">
+                          {pinningCards.has(card.id)
+                            ? "⏳"
+                            : card.pinned
+                            ? "📌"
+                            : "📍"}
+                        </span>
+                        {card.pinned ? "Pinned" : "Pin"}
+                      </button>
+                    </div>
                     <div className="card-upvote">
                       <button
                         onClick={() => handleUpvoteCard(card.id)}
