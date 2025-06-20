@@ -25,7 +25,7 @@ const BoardDetails = () => {
           setLoading(true);
         }
         const response = await fetch(
-          `http://localhost:5000/api/boards/${boardId}`
+          `process.env.API_URL || 'http://localhost:5000'/api/boards/${boardId}`
         );
 
         if (!response.ok) {
@@ -56,7 +56,7 @@ const BoardDetails = () => {
     try {
       // Create a new kudos card using the proper API endpoint
       const response = await fetch(
-        `http://localhost:5000/api/boards/${boardId}/cards`,
+        `process.env.API_URL || 'http://localhost:5000'/api/boards/${boardId}/cards`,
         {
           method: "POST",
           headers: {
@@ -99,7 +99,7 @@ const BoardDetails = () => {
       setUpvotingCards((prev) => new Set(prev).add(cardId));
 
       const response = await fetch(
-        `http://localhost:5000/api/cards/${cardId}/upvote`,
+        `process.env.API_URL || 'http://localhost:5000'/api/cards/${cardId}/upvote`,
         {
           method: "POST",
           headers: {
@@ -143,7 +143,7 @@ const BoardDetails = () => {
 
       const endpoint = currentPinnedStatus ? "unpin" : "pin";
       const response = await fetch(
-        `http://localhost:5000/api/cards/${cardId}/${endpoint}`,
+        `process.env.API_URL || 'http://localhost:5000'/api/cards/${cardId}/${endpoint}`,
         {
           method: "POST",
           headers: {
@@ -184,7 +184,7 @@ const BoardDetails = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:5000/api/cards/${cardId}`,
+        `process.env.API_URL || 'http://localhost:5000'/api/cards/${cardId}`,
         {
           method: "DELETE",
           headers: {
