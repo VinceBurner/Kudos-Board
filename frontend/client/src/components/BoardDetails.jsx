@@ -217,62 +217,13 @@ const BoardDetails = () => {
   }
 
   return (
-    <div
-      className={`board-details ${
-        board.image ? "board-details-with-wallpaper" : ""
-      }`}
-      style={
-        board.image
-          ? {
-              backgroundImage: `url(${board.image})`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-              backgroundRepeat: "no-repeat",
-              backgroundAttachment: "fixed",
-            }
-          : {}
-      }
-    >
-      {board.image && <div className="board-wallpaper-overlay"></div>}
-
+    <div className="board-details">
       <div className="board-details-content">
         <div className="board-details-header">
           <button onClick={() => navigate("/boards")} className="back-button">
             ← Back to Boards
           </button>
-          <h1>{board.title}</h1>
-        </div>
-
-        <div className="board-info-section">
-          <div className="board-meta">
-            <div className="meta-item">
-              <span className="meta-label">Category:</span>
-              <span className="meta-value">{board.category}</span>
-            </div>
-            <div className="meta-item">
-              <span className="meta-label">Created by:</span>
-              <span className="meta-value">{board.author}</span>
-            </div>
-            <div className="meta-item">
-              <span className="meta-label">Created:</span>
-              <span className="meta-value">{formatDate(board.createdAt)}</span>
-            </div>
-            {board.updatedAt && (
-              <div className="meta-item">
-                <span className="meta-label">Updated:</span>
-                <span className="meta-value">
-                  {formatDate(board.updatedAt)}
-                </span>
-              </div>
-            )}
-          </div>
-
-          {board.description && (
-            <div className="board-description">
-              <h3>Description</h3>
-              <p>{board.description}</p>
-            </div>
-          )}
+          <h1>{board.title} - Kudos Cards</h1>
         </div>
 
         <div className="cards-section">
@@ -306,6 +257,7 @@ const BoardDetails = () => {
                   </label>
                   <textarea
                     id="message"
+                    name="message"
                     value={newCard.message}
                     onChange={(e) =>
                       setNewCard({ ...newCard, message: e.target.value })
@@ -323,6 +275,7 @@ const BoardDetails = () => {
                   </label>
                   <input
                     id="author"
+                    name="author"
                     type="text"
                     value={newCard.author}
                     onChange={(e) =>
@@ -340,6 +293,7 @@ const BoardDetails = () => {
                   </label>
                   <input
                     id="cardImage"
+                    name="image"
                     type="url"
                     value={newCard.image}
                     onChange={(e) =>

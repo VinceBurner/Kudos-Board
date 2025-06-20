@@ -252,8 +252,9 @@ const BoardCard = ({
                   name="description"
                   value={formData.description}
                   onChange={handleFormChange}
-                  placeholder="Board description (optional)"
+                  placeholder="Board description (required)"
                   rows="3"
+                  required
                 />
               </div>
 
@@ -277,8 +278,7 @@ const BoardCard = ({
                   name="author"
                   value={formData.author}
                   onChange={handleFormChange}
-                  placeholder="Your name"
-                  required
+                  placeholder="Your name (optional)"
                 />
               </div>
 
@@ -288,7 +288,8 @@ const BoardCard = ({
                   name="image"
                   value={formData.image}
                   onChange={handleFormChange}
-                  placeholder="Image URL (optional)"
+                  placeholder="Board GIF/image URL (required)"
+                  required
                 />
               </div>
 
@@ -453,8 +454,9 @@ const BoardCard = ({
                 name="description"
                 value={editFormData.description}
                 onChange={handleEditFormChange}
-                placeholder="Board description (optional)"
+                placeholder="Board description (required)"
                 rows="3"
+                required
               />
             </div>
 
@@ -478,8 +480,7 @@ const BoardCard = ({
                 name="author"
                 value={editFormData.author}
                 onChange={handleEditFormChange}
-                placeholder="Author name"
-                required
+                placeholder="Author name (optional)"
               />
             </div>
 
@@ -489,7 +490,8 @@ const BoardCard = ({
                 name="image"
                 value={editFormData.image}
                 onChange={handleEditFormChange}
-                placeholder="Image URL (optional)"
+                placeholder="Board GIF/image URL (required)"
+                required
               />
             </div>
 

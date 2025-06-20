@@ -1,12 +1,10 @@
 import React, { useState } from "react";
-import {
-  getRandomBoardImage,
-  getRandomGradient,
-} from "../utils/randomImages";
+import { getRandomBoardImage, getRandomGradient } from "../utils/randomImages";
 
 const CreateBoardForm = ({ onCreateNew, onCancel }) => {
   const [formData, setFormData] = useState({
     title: "",
+    description: "",
     category: "",
     author: "",
     image: "",
@@ -42,7 +40,13 @@ const CreateBoardForm = ({ onCreateNew, onCancel }) => {
 
       const newBoard = await response.json();
 
-      setFormData({ title: "", category: "", author: "", image: "" });
+      setFormData({
+        title: "",
+        description: "",
+        category: "",
+        author: "",
+        image: "",
+      });
 
       if (onCreateNew) {
         onCreateNew(newBoard);
@@ -55,7 +59,13 @@ const CreateBoardForm = ({ onCreateNew, onCancel }) => {
   };
 
   const handleCancel = () => {
-    setFormData({ title: "", category: "", author: "", image: "" });
+    setFormData({
+      title: "",
+      description: "",
+      category: "",
+      author: "",
+      image: "",
+    });
     setError("");
     if (onCancel) {
       onCancel();
@@ -74,6 +84,17 @@ const CreateBoardForm = ({ onCreateNew, onCancel }) => {
               value={formData.title}
               onChange={handleFormChange}
               placeholder="Board title"
+              required
+            />
+          </div>
+
+          <div className="form-group">
+            <textarea
+              name="description"
+              value={formData.description}
+              onChange={handleFormChange}
+              placeholder="Board description (required)"
+              rows="3"
               required
             />
           </div>
@@ -101,8 +122,7 @@ const CreateBoardForm = ({ onCreateNew, onCancel }) => {
               name="author"
               value={formData.author}
               onChange={handleFormChange}
-              placeholder="Your name"
-              required
+              placeholder="Your name (optional)"
             />
           </div>
 
@@ -112,7 +132,8 @@ const CreateBoardForm = ({ onCreateNew, onCancel }) => {
               name="image"
               value={formData.image}
               onChange={handleFormChange}
-              placeholder="Wallpaper image URL (optional)"
+              placeholder="Board GIF/image URL (required)"
+              required
             />
             <div className="random-image-buttons">
               <button

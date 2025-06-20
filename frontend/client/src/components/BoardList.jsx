@@ -1,10 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import BoardCard from "./BoardCard";
 import CategoryFilter from "./CategoryFilter";
-import {
-  getRandomBoardImage,
-  getRandomGradient,
-} from "../utils/randomImages";
+import { getRandomBoardImage, getRandomGradient } from "../utils/randomImages";
 
 const BoardList = () => {
   const [boards, setBoards] = useState([]);
@@ -374,6 +371,17 @@ const BoardList = () => {
                   </div>
                 </div>
 
+                <div className="form-group">
+                  <textarea
+                    name="description"
+                    value={formData.description}
+                    onChange={handleFormChange}
+                    placeholder="Board description (required)"
+                    rows="3"
+                    required
+                  />
+                </div>
+
                 <div className="form-row">
                   <div className="form-group">
                     <input
@@ -381,8 +389,7 @@ const BoardList = () => {
                       name="author"
                       value={formData.author}
                       onChange={handleFormChange}
-                      placeholder="Your name"
-                      required
+                      placeholder="Your name (optional)"
                     />
                   </div>
                   <div className="form-group">
@@ -391,7 +398,8 @@ const BoardList = () => {
                       name="image"
                       value={formData.image}
                       onChange={handleFormChange}
-                      placeholder="Image URL (optional)"
+                      placeholder="Board GIF/image URL (required)"
+                      required
                     />
                     <div className="random-image-buttons">
                       <button
@@ -425,16 +433,6 @@ const BoardList = () => {
                       </button>
                     </div>
                   </div>
-                </div>
-
-                <div className="form-group">
-                  <textarea
-                    name="description"
-                    value={formData.description}
-                    onChange={handleFormChange}
-                    placeholder="Board description (optional)"
-                    rows="2"
-                  />
                 </div>
 
                 {createError && (
