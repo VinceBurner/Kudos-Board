@@ -25,7 +25,7 @@ const BoardDetails = () => {
           setLoading(true);
         }
         const response = await fetch(
-          `${import.meta.env.VITE_URL}/api/boards/${boardId}`
+          `${import.meta.env.process.env.API_URL}/api/boards/${boardId}`
         );
 
         if (!response.ok) {
@@ -56,7 +56,7 @@ const BoardDetails = () => {
     try {
       // Create a new kudos card using the proper API endpoint
       const response = await fetch(
-        `${import.meta.env.VITE_URL}/api/boards/${boardId}/cards`,
+        `${import.meta.env.process.env.API_URL}/api/boards/${boardId}/cards`,
         {
           method: "POST",
           headers: {
@@ -99,7 +99,7 @@ const BoardDetails = () => {
       setUpvotingCards((prev) => new Set(prev).add(cardId));
 
       const response = await fetch(
-        `${import.meta.env.VITE_URL}/api/cards/${cardId}/upvote`,
+        `${import.meta.env.process.env.API_URL}/api/cards/${cardId}/upvote`,
         {
           method: "POST",
           headers: {
@@ -143,7 +143,7 @@ const BoardDetails = () => {
 
       const endpoint = currentPinnedStatus ? "unpin" : "pin";
       const response = await fetch(
-        `${import.meta.env.VITE_URL}/api/cards/${cardId}/${endpoint}`,
+        `${import.meta.env.process.env.API_URL}/api/cards/${cardId}/${endpoint}`,
         {
           method: "POST",
           headers: {
@@ -184,7 +184,7 @@ const BoardDetails = () => {
 
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_URL}/api/cards/${cardId}`,
+        `${import.meta.env.process.env.API_URL}/api/cards/${cardId}`,
         {
           method: "DELETE",
           headers: {
