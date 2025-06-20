@@ -1,0 +1,1520 @@
+.modern-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+  min-height: 2.5rem;
+}
+
+.modern-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.modern-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.modern-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Button Variants */
+.modern-button.primary {
+  background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+  color: white;
+}
+
+.modern-button.primary:hover {
+  background: linear-gradient(135deg, #5b6470 0%, #3b4553 100%);
+}
+
+.modern-button.secondary {
+  background: linear-gradient(135deg, #9ca3af 0%, #6b7280 100%);
+  color: white;
+}
+
+.modern-button.secondary:hover {
+  background: linear-gradient(135deg, #8c939f 0%, #5b6270 100%);
+}
+
+.modern-button.success {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+}
+
+.modern-button.success:hover {
+  background: linear-gradient(135deg, #0ea971 0%, #047559 100%);
+}
+
+.modern-button.danger {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white;
+}
+
+.modern-button.danger:hover {
+  background: linear-gradient(135deg, #dc3434 0%, #cc2626 100%);
+}
+
+.modern-button.upvote {
+  background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%);
+  color: #374151;
+  padding: 0.5rem 1rem;
+  min-height: 2rem;
+}
+
+.modern-button.upvote:hover {
+  background: linear-gradient(135deg, #d1d5db 0%, #c1c5cb 100%);
+}
+
+.modern-button.upvoting {
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+  color: #1f2937;
+  animation: pulse 1s infinite;
+}
+
+.button-icon {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.upvote-icon {
+  font-size: 1.1rem;
+}
+
+.upvote-count {
+  font-weight: 700;
+  margin-left: 0.25rem;
+}
+
+.filter-button {
+  padding: 0.5rem 1rem;
+  margin: 0.25rem;
+  border-radius: 2rem;
+  font-size: 0.8rem;
+  min-height: 2rem;
+}
+
+.filter-button.active {
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+  transform: translateY(-2px);
+}
+
+.filter-count {
+  margin-left: 0.5rem;
+  opacity: 0.8;
+  font-weight: 500;
+}
+
+.modern-form {
+  background: var(--bg-form);
+  border-radius: 1rem;
+  padding: 2rem;
+  box-shadow: var(--shadow-lg);
+  color: var(--text-inverse);
+  margin: 1rem 0;
+}
+
+.form-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.form-header h3 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: 0 0 0.5rem 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.form-icon {
+  font-size: 1.8rem;
+}
+
+.form-subtitle {
+  margin: 0;
+  opacity: 0.9;
+  font-size: 0.9rem;
+  font-weight: 400;
+}
+
+.kudos-form,
+.board-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: white;
+}
+
+.label-icon {
+  font-size: 1rem;
+}
+
+.modern-input,
+.modern-textarea {
+  padding: 0.75rem 1rem;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 0.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  font-size: 0.9rem;
+  transition: all 0.2s ease-in-out;
+  backdrop-filter: blur(10px);
+}
+
+.modern-input::placeholder,
+.modern-textarea::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.modern-input:focus,
+.modern-textarea:focus {
+  outline: none;
+  border-color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.form-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+/* Card Styles */
+.kudos-card {
+  background: white;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease-in-out;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.kudos-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+/* Visual indicator for pinned cards */
+.kudos-card.pinned {
+  border-left: 4px solid #ffc107;
+  box-shadow: 0 4px 16px rgba(255, 193, 7, 0.2);
+  background: linear-gradient(135deg, #fff9e6 0%, #ffffff 100%);
+}
+
+.kudos-card.pinned:hover {
+  box-shadow: 0 8px 24px rgba(255, 193, 7, 0.3);
+}
+
+.card-content {
+  margin-bottom: 1rem;
+}
+
+.card-message {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #333;
+  margin: 0;
+}
+
+.card-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.card-pin {
+  display: flex;
+  align-items: center;
+}
+
+.pin-button {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  border: 1px solid;
+}
+
+.pin-button.unpinned {
+  background: #f8f9fa;
+  color: #6c757d;
+  border-color: #dee2e6;
+}
+
+.pin-button.unpinned:hover {
+  background: #e9ecef;
+  color: #495057;
+  border-color: #adb5bd;
+}
+
+.pin-button.pinned {
+  background: #fff3cd;
+  color: #856404;
+  border-color: #ffeaa7;
+}
+
+.pin-button.pinned:hover {
+  background: #ffeaa7;
+  border-color: #ffdf7e;
+}
+
+.pin-button.pinning {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.pin-button:disabled {
+  cursor: not-allowed;
+}
+
+.pin-icon {
+  font-size: 1rem;
+}
+
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.8rem;
+  color: #666;
+}
+
+.card-author {
+  font-weight: 600;
+  color: #333;
+}
+
+.card-date {
+  opacity: 0.7;
+}
+
+/* Board Card Styles */
+.board-card {
+  background: white;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease-in-out;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.board-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.board-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.board-title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #333;
+}
+
+.board-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.board-actions .modern-button {
+  padding: 0.5rem;
+  min-height: 2rem;
+  width: 2rem;
+}
+
+/* Simplified Board Card Styles */
+.simple-board-card {
+  text-align: center;
+  padding: 0;
+  overflow: hidden;
+}
+
+.simple-board-card .board-image {
+  margin: 0;
+  border-radius: 1rem 1rem 0 0;
+  height: 200px;
+  background: #f8f9fa;
+  position: relative;
+}
+
+.simple-board-card .board-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.2s ease-in-out;
+}
+
+.simple-board-card .board-image img:hover {
+  transform: scale(1.05);
+}
+
+.simple-board-card .board-image.gradient-background {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  font-size: 1rem;
+}
+
+.simple-board-card .board-header {
+  justify-content: center;
+  margin: 1.5rem 0;
+  padding: 0 1.5rem;
+}
+
+.simple-board-card .board-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #2563eb;
+  text-align: center;
+  margin: 0;
+}
+
+.board-actions-simple {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+  padding: 0 1.5rem 1.5rem 1.5rem;
+}
+
+.board-actions-simple .modern-button {
+  width: 100%;
+  max-width: 200px;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  justify-content: center;
+}
+
+.board-actions-simple .view-details-button {
+  background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+}
+
+.board-actions-simple .view-details-button:hover {
+  background: linear-gradient(135deg, #5b6470 0%, #3b4553 100%);
+}
+
+.board-actions-simple .delete-button {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+}
+
+.board-actions-simple .delete-button:hover {
+  background: linear-gradient(135deg, #dc3434 0%, #cc2626 100%);
+}
+
+/* Handle GIFs specifically in simplified cards */
+.simple-board-card .board-image img[src*="giphy.gif"],
+.simple-board-card .board-image img[src*=".gif"] {
+  object-fit: contain;
+  background: #000;
+}
+
+.board-footer {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.board-footer-actions {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.upvote-board-button {
+  padding: 0.5rem 1rem;
+  min-height: 2.25rem;
+  border-radius: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.upvote-board-button.upvote {
+  background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+  color: #333;
+}
+
+.upvote-board-button.upvote:hover {
+  background: linear-gradient(135deg, #96e6e2 0%, #fcc4d1 100%);
+  transform: translateY(-1px);
+}
+
+.upvote-board-button.upvoting {
+  background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+  color: #333;
+  animation: pulse 1s infinite;
+}
+
+.upvote-board-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.upvote-board-button .upvote-icon {
+  font-size: 1rem;
+}
+
+.upvote-board-button .upvote-count {
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.view-details-button {
+  flex: 1;
+  justify-content: center;
+}
+
+.board-upvotes {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+}
+
+.upvotes-label {
+  font-weight: 600;
+  color: #666;
+}
+
+.upvotes-value {
+  font-weight: 700;
+  color: #333;
+  background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.8rem;
+}
+
+/* Create Board Section */
+.create-board-section {
+  margin: 2rem 0;
+  text-align: center;
+}
+
+.create-board-button {
+  font-size: 1rem;
+  padding: 1rem 2rem;
+  border-radius: 2rem;
+}
+
+/* Search Area */
+.search-input-group {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  align-items: center;
+}
+
+.search-input {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 0.5rem;
+  font-size: 0.9rem;
+  transition: all 0.2s ease-in-out;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* Category Filter */
+.category-filter {
+  margin: 1.5rem 0;
+}
+
+.category-filter h3 {
+  margin: 0 0 1rem 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-title);
+}
+
+.filter-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+/* Cards Grid */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.cards-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.cards-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-title);
+}
+
+/* Animations */
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* No Cards Message */
+.no-cards-message {
+  text-align: center;
+  padding: 3rem;
+  color: #666;
+  font-size: 1.1rem;
+}
+
+.no-cards-message p {
+  margin: 0;
+}
+
+/* Error Messages */
+.error-message {
+  background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+  color: white;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin: 1rem 0;
+  font-weight: 600;
+  text-align: center;
+}
+
+/* Loading States */
+.loading {
+  text-align: center;
+  padding: 3rem;
+  font-size: 1.1rem;
+  color: #666;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .search-input-group {
+    flex-direction: column;
+  }
+
+  .search-input-group .modern-button {
+    width: 100%;
+  }
+
+  .filter-buttons {
+    justify-content: center;
+  }
+
+  .cards-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .form-buttons {
+    flex-direction: column;
+  }
+
+  .board-header {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .board-actions {
+    align-self: flex-end;
+  }
+}
+
+/* Back Button */
+.back-button {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  margin-bottom: 2rem;
+}
+
+.back-button:hover {
+  background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+  transform: translateY(-1px);
+}
+
+/* Board Details Styles */
+.board-details {
+  padding: 2rem 0;
+  min-height: 100vh;
+  background-color: #f5f5f5;
+}
+
+.board-details-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.board-details-with-wallpaper .board-details-content {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 1rem;
+  margin: 1rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.board-details-with-wallpaper .back-button {
+  background: rgba(102, 126, 234, 0.9);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.board-details-with-wallpaper .back-button:hover {
+  background: rgba(90, 111, 216, 0.95);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.board-details-with-wallpaper .modern-form {
+  background: rgba(102, 126, 234, 0.95);
+  backdrop-filter: blur(15px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.board-details-with-wallpaper .kudos-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.board-details-with-wallpaper .kudos-card:hover {
+  background: rgba(255, 255, 255, 0.98);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
+}
+
+/* Board Info Section */
+.board-info-section {
+  margin-bottom: 2rem;
+}
+
+.board-meta {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding: 1.5rem;
+  background: rgba(248, 250, 252, 0.8);
+  border-radius: 0.75rem;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.board-details-with-wallpaper .board-meta {
+  background: rgba(248, 250, 252, 0.9);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.meta-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.meta-value {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #333;
+}
+
+.board-description {
+  padding: 1.5rem;
+  background: rgba(248, 250, 252, 0.8);
+  border-radius: 0.75rem;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.board-details-with-wallpaper .board-description {
+  background: rgba(248, 250, 252, 0.9);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.board-description h3 {
+  margin: 0 0 1rem 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.board-description p {
+  margin: 0;
+  line-height: 1.6;
+  color: #555;
+}
+
+/* Board Details Header */
+.board-details-header {
+  margin-bottom: 2rem;
+}
+
+.board-details-header h1 {
+  margin: 1rem 0 0 0;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #2563eb;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.board-details-with-wallpaper .board-details-header h1 {
+  color: #333;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Cards Section */
+.cards-section {
+  margin-top: 2rem;
+}
+
+.add-card-button {
+  white-space: nowrap;
+}
+
+/* Random Image Buttons */
+.random-image-buttons {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.random-button {
+  padding: 0.5rem 0.75rem;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 0.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  white-space: nowrap;
+}
+
+.random-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.random-button:active {
+  transform: translateY(0);
+}
+
+/* For CreateBoardForm random buttons (different styling) */
+.create-board-form .random-button {
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.create-board-form .random-button:hover {
+  background: linear-gradient(135deg, #3d9bfe 0%, #00e0fe 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Card Image Styles */
+.card-image {
+  margin-bottom: 1rem;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  background: #f8f9fa;
+  position: relative;
+}
+
+.card-img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.2s ease-in-out;
+}
+
+.card-img:hover {
+  transform: scale(1.02);
+}
+
+/* Handle GIFs and images that might not load */
+.card-img[src*="giphy.gif"] {
+  height: 150px;
+  object-fit: contain;
+  background: #000;
+}
+
+.card-img[src*="picsum.photos"] {
+  height: 180px;
+}
+
+/* Board image preview in form */
+.image-preview {
+  margin-top: 0.5rem;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  max-height: 200px;
+}
+
+.image-preview img {
+  width: 100%;
+  height: auto;
+  max-height: 200px;
+  object-fit: cover;
+  display: block;
+}
+
+/* Gradient backgrounds for boards */
+.board-card[style*="linear-gradient"] {
+  color: white;
+}
+
+.board-card[style*="linear-gradient"] .board-title,
+.board-card[style*="linear-gradient"] .card-message,
+.board-card[style*="linear-gradient"] .card-author {
+  color: white;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.board-card[style*="linear-gradient"] .meta-label,
+.board-card[style*="linear-gradient"] .meta-value {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Board Image Styles - Images appear at top of cards */
+.board-image {
+  margin: -1.5rem -1.5rem 1rem -1.5rem; /* Negative margins to extend to card edges */
+  border-radius: 0.75rem 0.75rem 0 0; /* Only round top corners */
+  overflow: hidden;
+  height: 160px; /* Fixed height for consistency */
+  background: #f8f9fa;
+  position: relative;
+}
+
+.board-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.2s ease-in-out;
+}
+
+.board-image img:hover {
+  transform: scale(1.05);
+}
+
+/* Handle gradient backgrounds in board images */
+.board-image[style*="linear-gradient"] {
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Adjust board header when image is present */
+.board-card:has(.board-image) .board-header {
+  margin-top: 0; /* Remove top margin when image is present */
+}
+
+/* Ensure proper spacing for board content */
+.board-card .board-info {
+  margin-top: 1rem;
+}
+
+/* Handle very long images gracefully */
+.board-image img[src*="unsplash.com"] {
+  object-position: center;
+}
+
+.board-image img[src*="picsum.photos"] {
+  object-position: center;
+}
+
+/* Loading state for images - REMOVED to eliminate loading text on GIFs */
+/*
+.board-image::before {
+  content: "🖼️ Loading image...";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #666;
+  font-size: 0.9rem;
+  z-index: 1;
+}
+
+.board-image img:not([src=""]) + ::before {
+  display: none;
+}
+*/
+
+/* Error handling for broken images */
+.board-image img:not([src]),
+.board-image img[src=""] {
+  display: none;
+}
+
+.board-image:has(img:not([src])),
+.board-image:has(img[src=""]) {
+  display: none;
+}
+
+/* Loading state for images */
+.card-img[src=""] {
+  display: none;
+}
+
+.card-image:empty {
+  display: none;
+}
+
+/* Error handling for broken images */
+.card-img[alt="Card visual"]:not([src]),
+.card-img[alt="Card visual"][src=""] {
+  display: none;
+}
+
+/* Responsive adjustments for images */
+@media (max-width: 768px) {
+  .random-image-buttons {
+    justify-content: center;
+  }
+
+  .random-button {
+    font-size: 0.75rem;
+    padding: 0.4rem 0.6rem;
+  }
+
+  .card-img {
+    height: 150px;
+  }
+
+  .card-img[src*="giphy.gif"] {
+    height: 120px;
+  }
+}
+
+/* Responsive adjustments for wallpaper */
+@media (max-width: 768px) {
+  .board-details-content {
+    padding: 1rem;
+  }
+
+  .board-details-with-wallpaper .board-details-content {
+    margin: 0.5rem;
+    border-radius: 0.75rem;
+  }
+
+  .board-details-header h1 {
+    font-size: 2rem;
+  }
+
+  .board-meta {
+    grid-template-columns: 1fr;
+    padding: 1rem;
+  }
+}
+
+/* ===== THEME SYSTEM ===== */
+
+/* CSS Variables for Light Theme (Default) */
+:root {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8f9fa;
+  --bg-tertiary: #e9ecef;
+  --bg-card: #ffffff;
+  --bg-form: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+  --bg-pinned: linear-gradient(135deg, #fff9e6 0%, #ffffff 100%);
+
+  --text-primary: #1f2937;
+  --text-secondary: #6b7280;
+  --text-tertiary: #9ca3af;
+  --text-inverse: #ffffff;
+  --text-muted: rgba(0, 0, 0, 0.6);
+  --text-title: #111827;
+
+  --border-primary: rgba(0, 0, 0, 0.1);
+  --border-secondary: rgba(0, 0, 0, 0.05);
+  --border-input: #e2e8f0;
+  --border-pinned: #f59e0b;
+
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.15);
+  --shadow-pinned: 0 4px 16px rgba(245, 158, 11, 0.2);
+
+  --overlay-light: rgba(255, 255, 255, 0.1);
+  --overlay-medium: rgba(255, 255, 255, 0.2);
+  --overlay-backdrop: rgba(255, 255, 255, 0.95);
+}
+
+/* Dark Theme Variables */
+[data-theme="dark"] {
+  --bg-primary: #111827;
+  --bg-secondary: #1f2937;
+  --bg-tertiary: #374151;
+  --bg-card: #1f2937;
+  --bg-form: linear-gradient(135deg, #374151 0%, #4b5563 100%);
+  --bg-pinned: linear-gradient(135deg, #1f2937 0%, #374151 100%);
+
+  --text-primary: #f9fafb;
+  --text-secondary: #d1d5db;
+  --text-tertiary: #9ca3af;
+  --text-inverse: #111827;
+  --text-muted: rgba(255, 255, 255, 0.7);
+  --text-title: #ffffff;
+
+  --border-primary: rgba(255, 255, 255, 0.1);
+  --border-secondary: rgba(255, 255, 255, 0.05);
+  --border-input: #4b5563;
+  --border-pinned: #f59e0b;
+
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.4);
+  --shadow-pinned: 0 4px 16px rgba(245, 158, 11, 0.3);
+
+  --overlay-light: rgba(0, 0, 0, 0.1);
+  --overlay-medium: rgba(0, 0, 0, 0.2);
+  --overlay-backdrop: rgba(17, 24, 39, 0.95);
+}
+
+/* Apply theme to body */
+.theme-light {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.theme-dark {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Theme Toggle Button Styles */
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid var(--border-primary);
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+.theme-toggle:hover {
+  background: var(--bg-tertiary);
+  border-color: var(--border-input);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.theme-toggle-icon {
+  font-size: 1rem;
+}
+
+.theme-toggle-text {
+  font-weight: 600;
+}
+
+/* Header Theme Integration */
+.header {
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border-primary);
+  box-shadow: var(--shadow-sm);
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.header-text {
+  flex: 1;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.app-title {
+  color: var(--text-primary);
+}
+
+.app-subtitle {
+  color: var(--text-secondary);
+}
+
+/* Update existing components to use theme variables */
+
+/* Card Styles with Theme */
+.kudos-card {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid var(--border-secondary);
+  box-shadow: var(--shadow-md);
+}
+
+.kudos-card:hover {
+  box-shadow: var(--shadow-lg);
+}
+
+.kudos-card.pinned {
+  border-left: 4px solid var(--border-pinned);
+  box-shadow: var(--shadow-pinned);
+  background: var(--bg-pinned);
+}
+
+.card-message {
+  color: #2563eb;
+  font-weight: 700;
+}
+
+.card-author {
+  color: var(--text-primary);
+}
+
+.card-date {
+  color: var(--text-tertiary);
+}
+
+.card-actions {
+  border-top: 1px solid var(--border-primary);
+}
+
+/* Board Card Styles with Theme */
+.board-card {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid var(--border-secondary);
+  box-shadow: var(--shadow-md);
+}
+
+.board-card:hover {
+  box-shadow: var(--shadow-lg);
+}
+
+.board-title {
+  color: #2563eb;
+  font-weight: 700;
+}
+
+/* Form Styles with Theme */
+.modern-form {
+  background: var(--bg-form);
+  box-shadow: var(--shadow-lg);
+}
+
+.modern-input,
+.modern-textarea {
+  background: var(--overlay-light);
+  border-color: var(--overlay-medium);
+  color: var(--text-inverse);
+  backdrop-filter: blur(10px);
+}
+
+.modern-input::placeholder,
+.modern-textarea::placeholder {
+  color: var(--text-muted);
+}
+
+.modern-input:focus,
+.modern-textarea:focus {
+  border-color: var(--overlay-medium);
+  background: var(--overlay-medium);
+  box-shadow: 0 0 0 3px var(--overlay-light);
+}
+
+/* Board Meta and Description with Theme */
+.board-meta {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-secondary);
+}
+
+.board-description {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-secondary);
+}
+
+.meta-label {
+  color: var(--text-secondary);
+}
+
+.meta-value {
+  color: var(--text-primary);
+}
+
+.board-description h3 {
+  color: var(--text-primary);
+}
+
+.board-description p {
+  color: var(--text-secondary);
+}
+
+/* Search and Filter Styles with Theme */
+.search-input {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border-color: var(--border-input);
+}
+
+.search-input:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* Error and Loading States with Theme */
+.error-message {
+  background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+  color: white;
+}
+
+.loading {
+  color: var(--text-secondary);
+}
+
+.no-cards-message {
+  color: var(--text-secondary);
+}
+
+.no-boards-message {
+  color: var(--text-secondary);
+}
+
+/* Board Details with Wallpaper Theme Integration */
+.board-details {
+  background-color: var(--bg-secondary);
+}
+
+.board-details-with-wallpaper .board-details-content {
+  background: var(--overlay-backdrop);
+  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow-lg);
+}
+
+.board-details-with-wallpaper .back-button {
+  background: rgba(102, 126, 234, 0.9);
+  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow-md);
+}
+
+.board-details-with-wallpaper .modern-form {
+  background: rgba(102, 126, 234, 0.95);
+  backdrop-filter: blur(15px);
+  box-shadow: var(--shadow-lg);
+}
+
+.board-details-with-wallpaper .kudos-card {
+  background: var(--overlay-backdrop);
+  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow-lg);
+}
+
+.board-details-with-wallpaper .board-meta {
+  background: var(--overlay-backdrop);
+  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow-md);
+}
+
+.board-details-with-wallpaper .board-description {
+  background: var(--overlay-backdrop);
+  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow-md);
+}
+
+/* Pin Button Theme Integration */
+.pin-button.unpinned {
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  border-color: var(--border-primary);
+}
+
+.pin-button.unpinned:hover {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  border-color: var(--border-input);
+}
+
+.pin-button.pinned {
+  background: #fff3cd;
+  color: #856404;
+  border-color: #ffeaa7;
+}
+
+[data-theme="dark"] .pin-button.pinned {
+  background: #3a2f1a;
+  color: #f6ad55;
+  border-color: #d69e2e;
+}
+
+.pin-button.pinned:hover {
+  background: #ffeaa7;
+  border-color: #ffdf7e;
+}
+
+[data-theme="dark"] .pin-button.pinned:hover {
+  background: #4a3a20;
+  border-color: #ed8936;
+}
+
+/* Responsive Theme Adjustments */
+@media (max-width: 768px) {
+  .header-content {
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: center;
+  }
+
+  .header-actions {
+    justify-content: center;
+  }
+
+  .theme-toggle {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+  }
+}
+
+/* Smooth transitions for theme switching */
+* {
+  transition: background-color 0.3s ease, color 0.3s ease,
+    border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Ensure images and GIFs work well in both themes */
+.card-img,
+.board-image img {
+  border-radius: 0.5rem;
+}
+
+[data-theme="dark"] .card-img,
+[data-theme="dark"] .board-image img {
+  opacity: 0.9;
+}
+
+[data-theme="dark"] .card-img:hover,
+[data-theme="dark"] .board-image img:hover {
+  opacity: 1;
+}
