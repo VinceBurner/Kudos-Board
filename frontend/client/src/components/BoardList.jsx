@@ -27,7 +27,7 @@ const BoardList = () => {
       if (showLoading) {
         setLoading(true);
       }
-      const response = await fetch(process.env.API_URL || 'http://localhost:5000'/api/boards);
+      const response = await fetch(`${import.meta.env.VITE_URL}/api/boards`);
 
       if (!response.ok) {
         throw new Error("Failed to fetch boards");
@@ -56,7 +56,7 @@ const BoardList = () => {
 
     try {
       const response = await fetch(
-        `process.env.API_URL || 'http://localhost:5000'/api/boards/${boardId}`,
+        `${import.meta.env.VITE_URL}/api/boards/${boardId}`,
         {
           method: "DELETE",
         }
@@ -87,7 +87,7 @@ const BoardList = () => {
     setCreateError("");
 
     try {
-      const response = await fetch("process.env.API_URL || 'http://localhost:5000'/api/boards", {
+      const response = await fetch(`${import.meta.env.VITE_URL}/api/boards`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

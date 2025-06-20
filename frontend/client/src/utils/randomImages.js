@@ -199,29 +199,18 @@ const fetchGiphyGif = async (query) => {
  */
 export const searchGifs = async (query, limit = 12) => {
   try {
-    // Temporarily hardcode the API key to test
-    const apiKey = "791XtUIcq4jKiB7v2QWsSnHwY9IdGiQE";
+    const apiKey =
+      process.env.REACT_APP_GIPHY_API_KEY || "791XtUIcq4jKiB7v2QWsSnHwY9IdGiQE";
     const searchTerm = encodeURIComponent(query);
     const url = `https://api.giphy.com/v1/gifs/search?api_key=${apiKey}&q=${searchTerm}&limit=${limit}&rating=g`;
 
-    console.log("Making API request to:", url); // Debug log
-    console.log("Using API key:", apiKey.substring(0, 10) + "..."); // Debug log (partial key)
-    console.log("Environment variable:", process.env.REACT_APP_GIPHY_API_KEY); // Debug log
-
     const response = await fetch(url);
 
-    console.log("API response status:", response.status); // Debug log
-
     if (!response.ok) {
-      const errorText = await response.text();
-      console.error("API error response:", errorText); // Debug log
-      throw new Error(
-        `Giphy API request failed: ${response.status} ${errorText}`
-      );
+      throw new Error(`Giphy API request failed: ${response.status}`);
     }
 
     const data = await response.json();
-    console.log("API response data:", data); // Debug log
 
     if (data.data && data.data.length > 0) {
       const results = data.data.map((gif) => ({
@@ -230,11 +219,9 @@ export const searchGifs = async (query, limit = 12) => {
         title: gif.title,
         preview: gif.images.fixed_height_small.url,
       }));
-      console.log("Processed results:", results); // Debug log
       return results;
     }
 
-    console.log("No GIFs found in API response"); // Debug log
     return [];
   } catch (error) {
     console.error("Giphy search failed:", error);

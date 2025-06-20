@@ -37,7 +37,7 @@ const RegularBoardCard = ({ board, onDelete, onEdit }) => {
 
     try {
       const response = await fetch(
-        `process.env.API_URL || 'http://localhost:5000'/api/boards/${board.id}`,
+        `${import.meta.env.VITE_URL}/api/boards/${board.id}`,
         {
           method: "PUT",
           headers: {

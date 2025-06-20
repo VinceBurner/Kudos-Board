@@ -32,7 +32,7 @@ const BoardForm = ({ onBoardCreated }) => {
     setError("");
 
     try {
-      const response = await fetch("process.env.API_URL || 'http://localhost:5000'/api/boards", {
+      const response = await fetch("${import.meta.env.VITE_URL}/api/boards", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
